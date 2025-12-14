@@ -1,0 +1,43 @@
+import { ProfileMeta } from './types';
+
+export const PROFILES: ProfileMeta[] = [
+  {
+    id: 'default',
+    slug: 'default',
+    name: 'Default Profile',
+    description: 'Basic security and safety guardrails.',
+    guardrails: [
+      'pii-detection',
+      'prompt-injection',
+    ],
+    tags: ['input', 'security'],
+    stage: 'completed',
+    icon: '/icons/default.svg',
+    stats: { views: 2200, likes: 540, shares: 140 },
+  },
+  {
+    id: 'enterprise-security',
+    slug: 'enterprise-security',
+    name: 'Enterprise Security',
+    description: 'Enterprise-grade security with strict controls.',
+    guardrails: [
+      'pii-detection',
+      'prompt-injection',
+    ],
+    tags: ['enterprise', 'security'],
+    stage: 'maintenance',
+    icon: '/icons/enterprise.svg',
+    stats: { views: 3100, likes: 890, shares: 230 },
+  },
+  {
+    id: 'child-safety',
+    slug: 'child-safety',
+    name: 'Child Safety',
+    description: 'Maximum safety for children and education.',
+    guardrails: [],
+    tags: ['content-safety'],
+    stage: 'development',
+    icon: '/icons/child.svg',
+    stats: { views: 780, likes: 102, shares: 33 },
+  },
+];
