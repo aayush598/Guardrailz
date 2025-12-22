@@ -64,7 +64,7 @@ export class OutputPIIRedactionGuardrail extends BaseGuardrail {
         action: 'MODIFY',
         message: `Redacted ${total} PII item(s) from output`,
         redactedText,
-        details: {
+        metadata: {
           totalRedactions: total,
           breakdown: redactions,
         },
@@ -77,7 +77,7 @@ export class OutputPIIRedactionGuardrail extends BaseGuardrail {
       action: 'ALLOW',
       message: 'No PII detected in output',
       redactedText: text,
-      details: {
+      metadata: {
         totalRedactions: 0,
       },
     });

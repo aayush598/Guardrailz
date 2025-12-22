@@ -22,7 +22,7 @@ export class InputSizeGuardrail extends BaseGuardrail<InputSizeConfig> {
         severity: 'error',
         action: 'BLOCK',
         message: `Input exceeds maximum allowed size of ${this.maxChars} characters`,
-        details: {
+        metadata: {
           charCount,
           maxChars: this.maxChars,
           exceededBy: charCount - this.maxChars,
@@ -35,7 +35,7 @@ export class InputSizeGuardrail extends BaseGuardrail<InputSizeConfig> {
       severity: 'info',
       action: 'ALLOW',
       message: `Input size valid (${charCount}/${this.maxChars})`,
-      details: {
+      metadata: {
         charCount,
         maxChars: this.maxChars,
       },

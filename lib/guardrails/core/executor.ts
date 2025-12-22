@@ -1,5 +1,7 @@
 import { guardrailRegistry } from "./registry";
-import {normalizeGuardrailName} from './../index'
+import { normalizeGuardrailName } from "../index";
+import type { GuardrailResult } from "./types";
+
 export async function executeGuardrails(
   guardrails: Array<{ name?: string; class?: string; config?: any }>,
   text: string,
@@ -7,17 +9,17 @@ export async function executeGuardrails(
 ) {
   const start = Date.now();
 
-  const results = await Promise.all(
-    guardrails.map(async (g) => {
+  const results: GuardrailResult[] = await Promise.all(
+    guardrails.map(async (g): Promise<GuardrailResult> => {
       const guardrailName = g.name ?? g.class;
 
       if (!guardrailName) {
         return {
           passed: false,
-          guardrailName: 'UnknownGuardrail',
-          severity: 'error',
-          action: 'BLOCK',
-          message: 'Guardrail entry missing name/class',
+          guardrailName: "UnknownGuardrail",
+          severity: "error",
+          action: "BLOCK",
+          message: "Guardrail entry missing name/class",
         };
       }
 
@@ -32,9 +34,9 @@ export async function executeGuardrails(
         return {
           passed: false,
           guardrailName,
-          severity: 'error',
-          action: 'BLOCK',
-          message: e.message ?? 'Guardrail execution failed',
+          severity: "error",
+          action: "BLOCK",
+          message: e.message ?? "Guardrail execution failed",
         };
       }
     })

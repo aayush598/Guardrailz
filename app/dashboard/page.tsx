@@ -100,7 +100,7 @@ export default function DashboardPage() {
                   <div className="absolute inset-0 bg-indigo-600 blur-lg opacity-20 group-hover:opacity-40 transition-opacity"></div>
                 </div>
                 <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
-                  Secure Agents
+                  Guardrailz
                 </span>
               </Link>
             </div>

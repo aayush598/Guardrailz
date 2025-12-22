@@ -4,15 +4,15 @@ export { guardrailRegistry } from './core/registry';
 import { guardrailRegistry } from './core/registry';
 import { InputSizeGuardrail } from './input/input-size.guardrail';
 import { SecretsInInputGuardrail } from './input/secrets.guardrail';
-import { NSFWGuardrail } from './input/nsfw.guardrail';
+import { NSFWAdvancedGuardrail } from './input/nsfw.guardrail';
 import { OutputPIIRedactionGuardrail } from './output/pii-redaction.guardrail';
-import { ToolAccessGuardrail } from './tool/tool-access.guardrail';
+import { ToolAccessControlGuardrail } from './tool/tool-access.guardrail';
 
 // guardrailRegistry.register('InputSize', c => new InputSizeGuardrail(c));
 // guardrailRegistry.register('Secrets', c => new SecretsInInputGuardrail(c));
-// guardrailRegistry.register('NSFW', c => new NSFWGuardrail(c));
+// guardrailRegistry.register('NSFW', c => new NSFWAdvancedGuardrail(c));
 // guardrailRegistry.register('PIIRedaction', c => new OutputPIIRedactionGuardrail(c));
-// guardrailRegistry.register('ToolAccess', c => new ToolAccessGuardrail(c));
+// guardrailRegistry.register('ToolAccess', c => new ToolAccessControlGuardrail(c));
 
 export function normalizeGuardrailName(name: string): string {
   if (name.endsWith('Guardrail')) {
@@ -34,7 +34,7 @@ guardrailRegistry.register(
 
 guardrailRegistry.register(
   'NSFW',
-  c => new NSFWGuardrail(c)
+  c => new NSFWAdvancedGuardrail(c)
 );
 
 guardrailRegistry.register(
@@ -44,7 +44,7 @@ guardrailRegistry.register(
 
 guardrailRegistry.register(
   'ToolAccess',
-  c => new ToolAccessGuardrail(c)
+  c => new ToolAccessControlGuardrail(c)
 );
 
 

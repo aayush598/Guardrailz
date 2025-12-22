@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { GUARDRAILS } from '@/lib/hub/guardrails';
 import { PROFILES } from '@/lib/hub/profiles';
-import { HUB_TAGS } from '@/lib/hub/tags';
+import { HUB_TAGS, HubTag } from '@/lib/hub/tags';
 import {
   Eye,
   Heart,
@@ -17,7 +17,7 @@ type SortBy = 'views' | 'likes' | 'shares' | 'name';
 
 export default function HubPage() {
   const [query, setQuery] = useState('');
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<HubTag[]>([]);
   const [sortBy, setSortBy] = useState<SortBy>('views');
 
   const items = useMemo(() => {
@@ -46,7 +46,7 @@ export default function HubPage() {
       });
   }, [query, selectedTags, sortBy]);
 
-  const toggleTag = (tag: string) => {
+  const toggleTag = (tag: HubTag) => {
     setSelectedTags(prev =>
       prev.includes(tag)
         ? prev.filter(t => t !== tag)

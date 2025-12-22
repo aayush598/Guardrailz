@@ -10,3 +10,5 @@ export const HUB_TAGS = [
   'healthcare',
   'finance',
 ] as const;
+
+export type HubTag = typeof HUB_TAGS[number];

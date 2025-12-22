@@ -293,8 +293,8 @@ export class ToolAccessControlGuardrail extends BaseGuardrail {
     if (!context || !('toolAccess' in context)) {
     return this.result({
       passed: true,
-      action: GuardrailAction.ALLOW,
-      severity: GuardrailSeverity.INFO,
+      action: 'ALLOW',
+      severity: 'info',
       message: 'No tool invocation detected',
     });
     }
@@ -306,8 +306,8 @@ export class ToolAccessControlGuardrail extends BaseGuardrail {
     if (!toolCtx) {
       return this.result({
         passed: true,
-        action: GuardrailAction.ALLOW,
-        severity: GuardrailSeverity.INFO,
+        action: 'ALLOW',
+        severity: 'info',
         message: 'No tool invocation detected',
       });
     }
@@ -327,8 +327,8 @@ export class ToolAccessControlGuardrail extends BaseGuardrail {
     ) {
       return this.result({
         passed: false,
-        action: GuardrailAction.BLOCK,
-        severity: GuardrailSeverity.ERROR,
+        action: 'BLOCK',
+        severity: 'error',
         message: 'Invalid capability token signature',
       });
     }
@@ -346,7 +346,38 @@ export class ToolAccessControlGuardrail extends BaseGuardrail {
       action: mapDecisionToAction(decision),
       severity: mapDecisionToSeverity(decision),
       message: `Tool '${toolName}': ${reason}`,
-      details: metadata,
+      metadata,
     });
+  }
+}
+
+function mapDecisionToAction(decision: PolicyDecision): GuardrailAction {
+  switch (decision) {
+    case PolicyDecision.ALLOW:
+    case PolicyDecision.AUDIT_ONLY:
+      return 'ALLOW';
+    case PolicyDecision.ALLOW_WITH_SANITIZATION:
+      return 'MODIFY';
+    case PolicyDecision.REQUIRE_APPROVAL:
+      return 'WARN';
+    case PolicyDecision.DENY:
+    case PolicyDecision.QUARANTINE:
+      return 'BLOCK';
+  }
+}
+
+function mapDecisionToSeverity(decision: PolicyDecision): GuardrailSeverity {
+  switch (decision) {
+    case PolicyDecision.ALLOW:
+      return 'info';
+    case PolicyDecision.AUDIT_ONLY:
+    case PolicyDecision.REQUIRE_APPROVAL:
+      return 'warning';
+    case PolicyDecision.ALLOW_WITH_SANITIZATION:
+      return 'warning';
+    case PolicyDecision.DENY:
+      return 'error';
+    case PolicyDecision.QUARANTINE:
+      return 'critical';
   }
 }

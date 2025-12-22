@@ -1,5 +1,5 @@
 import { GuardrailContext } from './context';
-import { GuardrailResult, GuardrailSeverity, GuardrailAction } from './types';
+import { GuardrailResult,GuardrailStage, GuardrailSeverity, GuardrailAction } from './types';
 
 export abstract class BaseGuardrail<Config = any> {
   readonly name: string;

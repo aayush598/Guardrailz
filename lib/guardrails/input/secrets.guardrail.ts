@@ -43,7 +43,7 @@ export class SecretsInInputGuardrail extends BaseGuardrail {
         severity: 'critical',
         action: 'BLOCK',
         message: `Detected ${findings.length} secret(s) in input`,
-        details: {
+        metadata: {
           count: findings.length,
           secrets: findings,
         },
@@ -55,7 +55,7 @@ export class SecretsInInputGuardrail extends BaseGuardrail {
       severity: 'info',
       action: 'ALLOW',
       message: 'No secrets detected in input',
-      details: {
+      metadata: {
         count: 0,
       },
     });

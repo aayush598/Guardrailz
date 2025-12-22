@@ -1,3 +1,5 @@
+import { GuardrailSeverity, GuardrailAction } from "./types";
+
 export interface GuardrailResult {
   passed: boolean;
   guardrailName: string;

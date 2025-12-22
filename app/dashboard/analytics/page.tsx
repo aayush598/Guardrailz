@@ -128,7 +128,7 @@ export default function AnalyticsPage() {
               <Link href="/dashboard" className="flex items-center space-x-3 group">
                 <Shield className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
                 <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
-                  Secure Agents
+                  Guardrailz
                 </span>
               </Link>
             </div>

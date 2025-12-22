@@ -349,10 +349,8 @@ export class NSFWAdvancedGuardrail extends BaseGuardrail<NSFWGuardrailConfig> {
       passed: decision.action !== 'BLOCK',
       action: decision.action,
       severity: severityMap[decision.severity],
-      message: decision.action === 'WARN'
-        ? `Warning: ${decision.reasoning}`
-        : decision.reasoning,
-      details: {
+      message: decision.reasoning,
+      metadata: {
         nsfwLevel: NSFWSeverityLevel[decision.severity],
         confidence: Number(decision.confidence.toFixed(3)),
         signalsDetected: signals.length,
@@ -415,8 +413,7 @@ export class NSFWAdvancedGuardrail extends BaseGuardrail<NSFWGuardrailConfig> {
     this.eroticIntentIndicators = [
       /\b(turned\s+on|fantasize|aroused)\b/i,
     ];
-    this.roleplayIndicators = attachment
-      ? [] : [/\b(roleplay|scenario|fictional)\b/i];
+    this.roleplayIndicators = [/\b(roleplay|scenario|fictional)\b/i];
   }
 
   private initObfuscationPatterns() {
