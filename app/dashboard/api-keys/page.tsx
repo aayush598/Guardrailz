@@ -32,7 +32,9 @@ interface ApiKey {
   lastUsedAt: string | null;
   expiresAt: string | null;
   usageToday?: number;
+  usageMinute?: number;
 }
+
 
 export default function ApiKeysPage() {
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
@@ -52,19 +54,35 @@ export default function ApiKeysPage() {
   }, []);
 
   const fetchApiKeys = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch('/api/keys');
-      if (!res.ok) throw new Error('Failed to fetch API keys');
-      const data = await res.json();
-      setApiKeys(data.apiKeys || []);
-    } catch (error) {
-      console.error('Failed to fetch API keys:', error);
-      alert('Failed to load API keys');
-    } finally {
-      setLoading(false);
+  setLoading(true);
+  try {
+    const [keysRes, usageRes] = await Promise.all([
+      fetch('/api/keys'),
+      fetch('/api/usage/keys'),
+    ]);
+
+    if (!keysRes.ok || !usageRes.ok) {
+      throw new Error('Failed to load API data');
     }
-  };
+
+    const { apiKeys } = await keysRes.json();
+    const usage = await usageRes.json();
+
+    const enriched = apiKeys.map((key: ApiKey) => ({
+      ...key,
+      usageToday: usage.perDay[key.id] ?? 0,
+      usageMinute: usage.perMinute[key.id] ?? 0,
+    }));
+
+    setApiKeys(enriched);
+  } catch (error) {
+    console.error(error);
+    alert('Failed to load API keys');
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const createApiKey = async () => {
     if (!newKeyName.trim()) {
@@ -398,7 +416,7 @@ export default function ApiKeysPage() {
                       <th className="text-left py-4 px-4 text-sm font-semibold text-slate-900">Created</th>
                       <th className="text-left py-4 px-4 text-sm font-semibold text-slate-900">Last Used</th>
                       <th className="text-left py-4 px-4 text-sm font-semibold text-slate-900">Usage Today</th>
-                      <th className="text-left py-4 px-4 text-sm font-semibold text-slate-900">Rate Limit</th>
+                      <th className="text-left py-4 px-4 text-sm font-semibold text-slate-900">Usage per min</th>
                       <th className="text-right py-4 px-4 text-sm font-semibold text-slate-900">Actions</th>
                     </tr>
                   </thead>
@@ -467,8 +485,29 @@ export default function ApiKeysPage() {
                             </div>
                           </td>
                           <td className="py-4 px-4 text-sm text-slate-600">
-                            {key.requestsPerMinute}/min
+                            <div className="space-y-1">
+                              <div>
+                                <span className="font-medium text-slate-900">
+                                  {key.usageMinute?.toLocaleString() ?? 0}
+                                </span>
+                                <span className="text-xs text-slate-500">
+                                  {' '} / {key.requestsPerMinute}
+                                </span>
+                              </div>
+                              <div className="w-24 bg-slate-200 rounded-full h-1.5">
+                                <div
+                                  className="bg-slate-900 h-1.5 rounded-full"
+                                  style={{
+                                    width: `${Math.min(
+                                      ((key.usageMinute ?? 0) / key.requestsPerMinute) * 100,
+                                      100
+                                    )}%`,
+                                  }}
+                                />
+                              </div>
+                            </div>
                           </td>
+
                           <td className="py-4 px-4">
                             <div className="flex items-center justify-end space-x-1">
                               <Button
