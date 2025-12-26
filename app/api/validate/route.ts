@@ -6,25 +6,34 @@ import { apiKeys, profiles, guardrailExecutions } from '@/lib/db/schema';
 import { and, eq } from 'drizzle-orm';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { runGuardrails } from '@/lib/guardrails/service';
+import { PerfTracker } from '@/lib/perf';
+
 
 export async function POST(req: NextRequest) {
+  const perf = new PerfTracker();
+
   try {
     const apiKey = req.headers.get('x-api-key');
     if (!apiKey) {
       return NextResponse.json({ error: 'API key required' }, { status: 401 });
     }
 
+    perf.start("api_key_lookup");
     const [key] = await db
       .select()
       .from(apiKeys)
       .where(and(eq(apiKeys.key, apiKey), eq(apiKeys.isActive, true)))
       .limit(1);
+    perf.end("api_key_lookup");
 
     if (!key) {
       return NextResponse.json({ error: 'Invalid API key' }, { status: 401 });
     }
 
+    perf.start("rate_limit_check");
     const rate = await checkRateLimit(key.id, key.userId);
+    perf.end("rate_limit_check");
+
     if (!rate.allowed) {
       return NextResponse.json(
         { error: rate.reason, limits: rate.limits },
@@ -38,6 +47,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Text is required' }, { status: 400 });
     }
 
+    perf.start("profile_lookup");
     const [profile] = await db
       .select()
       .from(profiles)
@@ -47,6 +57,7 @@ export async function POST(req: NextRequest) {
           : and(eq(profiles.name, 'default'), eq(profiles.isBuiltIn, true))
       )
       .limit(1);
+    perf.end("profile_lookup");
 
     if (!profile) {
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
@@ -59,6 +70,7 @@ export async function POST(req: NextRequest) {
         ? profile.outputGuardrails
         : [...profile.inputGuardrails, ...profile.outputGuardrails];
 
+    perf.start("guardrails_total");
     const result = await runGuardrails(
       guardrails,
       text,
@@ -69,7 +81,9 @@ export async function POST(req: NextRequest) {
         profileId: profile.id,
       }
     );
+    perf.end("guardrails_total");
 
+    perf.start("execution_log_insert");
     await db.insert(guardrailExecutions).values({
       userId: key.userId,
       apiKeyId: key.id,
@@ -80,6 +94,7 @@ export async function POST(req: NextRequest) {
       passed: result.passed,
       executionTimeMs: result.executionTimeMs,
     });
+    perf.end("execution_log_insert");
 
     return NextResponse.json({
       success: true,
@@ -90,6 +105,7 @@ export async function POST(req: NextRequest) {
       summary: result.summary,
       executionTimeMs: result.executionTimeMs,
       rateLimits: rate.limits,
+      perf: perf.summary(),
     });
   } catch (err: any) {
     console.error(err);
