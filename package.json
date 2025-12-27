@@ -53,6 +53,7 @@
         "drizzle-orm": "^0.45.1",
         "embla-carousel-react": "^8.6.0",
         "input-otp": "^1.4.2",
+        "ioredis": "^5.8.2",
         "lucide-react": "^0.516.0",
         "mongodb": "^6.6.0",
         "nanoid": "^5.1.6",
