@@ -1,105 +1,105 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import {
-  Shield,
-  Home,
-  Key,
-  FileCode,
-  Activity,
-  BarChart3,
-  Settings,
-  Menu,
-  X,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { UserButton } from '@clerk/nextjs';
+import { 
+  Shield, Home, Key, FileCode, Activity, 
+  BarChart3, Settings, Menu, X, Terminal
+} from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const pathname = usePathname();
 
-  const NavLink = ({
-    href,
-    icon: Icon,
-    label,
-  }: {
-    href: string;
-    icon: any;
-    label: string;
-  }) => (
-    <Link
-      href={href}
-      className="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-50"
-      onClick={() => setSidebarOpen(false)}
-    >
-      <Icon className="h-5 w-5" />
-      <span>{label}</span>
-    </Link>
-  );
+  const navigation = [
+    { name: 'Overview', href: '/dashboard', icon: Home },
+    { name: 'API Keys', href: '/dashboard/api-keys', icon: Key },
+    { name: 'Profiles', href: '/dashboard/profiles', icon: FileCode },
+    { name: 'Playground', href: '/dashboard/playground', icon: Terminal },
+    { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 },
+    { name: 'Settings', href: '/dashboard/settings', icon: Settings },
+  ];
 
   return (
-    <div className="min-h-screen bg-white flex">
-      {/* Sidebar */}
-      <aside
-        className={`fixed lg:sticky top-0 left-0 z-40 h-screen w-64 bg-white border-r border-slate-200 transition-transform ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-        }`}
-      >
+    <div className="flex min-h-screen bg-white">
+      {/* Sidebar - Width set to 260px for optimal readability */}
+      <aside className={cn(
+        "fixed inset-y-0 left-0 z-50 w-[260px] bg-slate-50/50 border-r border-slate-200 transition-transform duration-300 lg:translate-x-0 lg:static lg:inset-0",
+        sidebarOpen ? "translate-x-0" : "-translate-x-full"
+      )}>
         <div className="flex flex-col h-full">
-          <div className="flex items-center justify-between p-6 border-b">
-            <div className="flex items-center space-x-2">
-              <Shield className="h-7 w-7 text-slate-900" />
-              <span className="text-lg font-bold">Guardrailz</span>
-            </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="lg:hidden"
-              onClick={() => setSidebarOpen(false)}
-            >
-              <X />
-            </Button>
+          <div className="h-16 flex items-center px-6 border-b border-slate-200 bg-white">
+            <Link href="/" className="flex items-center gap-2.5">
+              <Shield className="h-6 w-6 text-indigo-600" />
+              <span className="text-lg font-bold tracking-tight text-slate-900">Guardrailz</span>
+            </Link>
           </div>
 
-          <nav className="flex-1 p-4 space-y-1">
-            <NavLink href="/dashboard" icon={Home} label="Overview" />
-            <NavLink href="/dashboard/api-keys" icon={Key} label="API Keys" />
-            <NavLink href="/dashboard/profiles" icon={FileCode} label="Profiles" />
-            <NavLink href="/dashboard/playground" icon={Activity} label="Playground" />
-            <NavLink href="/dashboard/analytics" icon={BarChart3} label="Analytics" />
-            <NavLink href="/dashboard/settings" icon={Settings} label="Settings" />
+          <nav className="flex-1 overflow-y-auto p-4 space-y-1">
+            {navigation.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={cn(
+                    "flex items-center gap-3 px-3 py-2 rounded-md text-[14px] font-medium transition-colors",
+                    isActive 
+                      ? "bg-white text-indigo-600 shadow-sm border border-slate-200/50" 
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                  )}
+                >
+                  <item.icon className={cn("h-4 w-4", isActive ? "text-indigo-600" : "text-slate-400")} />
+                  {item.name}
+                </Link>
+              );
+            })}
           </nav>
+
+          <div className="p-4 border-t border-slate-200 bg-white/50">
+             <div className="flex items-center gap-3 px-2">
+                <UserButton afterSignOutUrl="/" />
+                <div className="flex flex-col">
+                  <span className="text-xs font-medium text-slate-900">Account</span>
+                  <span className="text-[10px] text-slate-500">Professional Plan</span>
+                </div>
+             </div>
+          </div>
         </div>
       </aside>
 
-      {/* Mobile overlay */}
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col min-w-0">
+        <header className="h-16 flex items-center justify-between px-8 border-b border-slate-200 bg-white sticky top-0 z-30">
+          <div className="flex items-center">
+            <Button variant="ghost" size="icon" className="lg:hidden mr-2" onClick={() => setSidebarOpen(true)}>
+              <Menu className="h-5 w-5" />
+            </Button>
+            <h2 className="text-sm font-medium text-slate-500 uppercase tracking-wider">
+              {navigation.find(n => n.href === pathname)?.name || 'Dashboard'}
+            </h2>
+          </div>
+          <div className="flex items-center gap-4">
+             <Badge variant="outline" className="text-emerald-600 bg-emerald-50 border-emerald-100">System Live</Badge>
+          </div>
+        </header>
+
+        <main className="flex-1 bg-white p-8">
+          <div className="max-w-7xl mx-auto text-[16px]">
+            {children}
+          </div>
+        </main>
+      </div>
+
+      {/* Mobile Overlay */}
       {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 z-30 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
+        <div className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
-
-      {/* Content */}
-      <main className="flex-1 bg-slate-50 overflow-y-auto">
-        <div className="sticky top-0 z-20 bg-white border-b px-6 py-4 flex items-center">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="lg:hidden mr-2"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <Menu />
-          </Button>
-          <h1 className="text-lg font-semibold text-slate-900">Dashboard</h1>
-        </div>
-
-        <div className="p-6">{children}</div>
-      </main>
     </div>
   );
 }
