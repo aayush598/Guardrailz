@@ -77,7 +77,7 @@ export default function ApiKeysClient({
   };
 
   const mask = (k: string) =>
-    `${k.slice(0, 10)}••••••••••••${k.slice(-6)}`;
+    `${k.slice(0, 10)}•••••••••••••••••••••••••${k.slice(-6)}`;
 
   return (
     <div className="p-6">
@@ -110,69 +110,144 @@ export default function ApiKeysClient({
             <table className="w-full">
               <thead className="bg-slate-50 border-b">
                 <tr>
-                  <th className="px-4 py-3 text-left text-sm">Name</th>
-                  <th className="px-4 py-3 text-left text-sm">Key</th>
-                  <th className="px-4 py-3 text-left text-sm">Status</th>
-                  <th className="px-4 py-3 text-right text-sm">Actions</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600">Name</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600">API Key</th>
+                  <th className="px-4 py-3 text-center text-xs font-semibold text-slate-600">Status</th>
+                  <th className="px-4 py-3 text-right text-xs font-semibold text-slate-600">RPM</th>
+                  <th className="px-4 py-3 text-right text-xs font-semibold text-slate-600">RPD</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600">Created</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600">Last Used</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600">Expires</th>
+                  <th className="px-4 py-3 text-right text-xs font-semibold text-slate-600">Actions</th>
                 </tr>
               </thead>
+
               <tbody>
                 {keys.map((k) => {
                   const show = visible.has(k.id);
+                  const expired = k.expiresAt
+                    ? new Date(k.expiresAt) < new Date()
+                    : false;
+
                   return (
-                    <tr key={k.id} className="border-b">
-                      <td className="px-4 py-3 font-medium">{k.name}</td>
-                      <td className="px-4 py-3 font-mono text-xs">
-                        {show ? k.key : mask(k.key)}
+                    <tr key={k.id} className="border-b hover:bg-slate-50">
+                      {/* Name */}
+                      <td className="px-4 py-4 font-medium text-slate-900">
+                        {k.name}
                       </td>
-                      <td className="px-4 py-3">
+
+                      {/* API Key (NO SHIFT) */}
+                      <td className="px-4 py-4">
+                        <div className="w-[388px] font-mono text-xs bg-slate-100 rounded-md px-3 py-2 ">
+                          {show ? k.key : mask(k.key)}
+                        </div>
+                      </td>
+
+                      {/* Status */}
+                      <td className="px-4 py-4 text-center">
                         <Badge
                           className={
                             k.isActive
                               ? 'bg-slate-900 text-white'
-                              : 'bg-slate-100'
+                              : 'bg-slate-100 text-slate-700'
                           }
                         >
                           {k.isActive ? 'Active' : 'Inactive'}
                         </Badge>
                       </td>
-                      <td className="px-4 py-3 text-right">
-                        <div className="inline-flex gap-1 items-center">
-                            {/* 🔹 Analytics */}
-                            <Link href={`/dashboard/api-keys/${k.id}`}>
+
+                      {/* RPM */}
+                      <td className="px-4 py-4 text-right text-sm text-slate-700">
+                        {k.requestsPerMinute.toLocaleString()}
+                      </td>
+
+                      {/* RPD */}
+                      <td className="px-4 py-4 text-right text-sm text-slate-700">
+                        {k.requestsPerDay.toLocaleString()}
+                      </td>
+
+                      {/* Created */}
+                      <td className="px-4 py-4 text-sm text-slate-600">
+                        {new Date(k.createdAt).toLocaleDateString()}
+                      </td>
+
+                      {/* Last Used */}
+                      <td className="px-4 py-4 text-sm text-slate-600">
+                        {k.lastUsedAt
+                          ? new Date(k.lastUsedAt).toLocaleDateString()
+                          : '—'}
+                      </td>
+
+                      {/* Expires */}
+                      <td className="px-4 py-4 text-sm">
+                        {k.expiresAt ? (
+                          <span
+                            className={
+                              expired
+                                ? 'text-red-600 font-medium'
+                                : 'text-slate-600'
+                            }
+                          >
+                            {new Date(k.expiresAt).toLocaleDateString()}
+                          </span>
+                        ) : (
+                          <span className="text-slate-400">Never</span>
+                        )}
+                      </td>
+
+                      {/* Actions (FIXED WIDTH) */}
+                      <td className="px-4 py-4">
+                        <div className="flex justify-end gap-1 w-[160px]">
+                          {/* Analytics */}
+                          <Link href={`/dashboard/api-keys/${k.id}`}>
                             <Button
-                                variant="ghost"
-                                size="sm"
-                                title="View analytics"
-                                className="hover:bg-slate-100"
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0"
+                              title="View analytics"
                             >
-                                <BarChart3 className="h-4 w-4" />
+                              <BarChart3 className="h-4 w-4" />
                             </Button>
-                            </Link>
+                          </Link>
+
+                          {/* Show / Hide */}
                           <Button
                             variant="ghost"
                             size="sm"
+                            className="h-8 w-8 p-0"
                             onClick={() => toggleVisibility(k.id)}
                           >
-                            {show ? <EyeOff /> : <Eye />}
+                            {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                           </Button>
+
+                          {/* Copy */}
                           <Button
                             variant="ghost"
                             size="sm"
+                            className="h-8 w-8 p-0"
                             onClick={() => copyKey(k.key, k.id)}
                           >
-                            {copied === k.id ? <Check /> : <Copy />}
+                            {copied === k.id ? (
+                              <Check className="h-4 w-4" />
+                            ) : (
+                              <Copy className="h-4 w-4" />
+                            )}
                           </Button>
+
+                          {/* Menu */}
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="sm">
-                                <MoreVertical />
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0"
+                              >
+                                <MoreVertical className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
+
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem
-                                onClick={() => toggleStatus(k)}
-                              >
+                              <DropdownMenuItem onClick={() => toggleStatus(k)}>
                                 {k.isActive ? (
                                   <>
                                     <PowerOff className="h-4 w-4 mr-2" />
@@ -185,9 +260,12 @@ export default function ApiKeysClient({
                                   </>
                                 )}
                               </DropdownMenuItem>
+
                               <DropdownMenuSeparator />
+
                               <DropdownMenuItem
                                 onClick={() => deleteKey(k.id)}
+                                className="text-red-600"
                               >
                                 <Trash2 className="h-4 w-4 mr-2" />
                                 Delete
@@ -200,6 +278,8 @@ export default function ApiKeysClient({
                   );
                 })}
               </tbody>
+
+
             </table>
           </div>
         </Card>
