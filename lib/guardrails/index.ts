@@ -7,7 +7,7 @@ import { PHIAwarenessGuardrail } from './input/phi-awareness.guardrail';
 import { UrlFileBlockerGuardrail } from './input/url-file-blocker.guardrail';
 import { BinaryAttachmentGuardrail } from './input/binary-attachment.guardrail';
 import { EncodingObfuscationGuardrail } from './input/encoding-obfuscation.guardrail';
-
+import { DangerousPatternsGuardrail } from './input/dangerous-patterns.guardrail';
 
 import { OutputPIIRedactionGuardrail } from './output/pii-redaction.guardrail';
 import { ToolAccessControlGuardrail } from './tool/tool-access.guardrail';
@@ -20,6 +20,7 @@ guardrailRegistry.register('PHIAwareness', c => new PHIAwarenessGuardrail(c));
 guardrailRegistry.register('UrlFileBlocker', c => new UrlFileBlockerGuardrail(c));
 guardrailRegistry.register('BinaryAttachment', c => new BinaryAttachmentGuardrail(c));
 guardrailRegistry.register('EncodingObfuscation', c => new EncodingObfuscationGuardrail(c));
+guardrailRegistry.register('DangerousPatterns', c => new DangerousPatternsGuardrail(c));
 
 // Output
 guardrailRegistry.register('OutputPIIRedaction', c => new OutputPIIRedactionGuardrail(c));
