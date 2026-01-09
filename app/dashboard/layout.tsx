@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { usePathname } from 'next/navigation';
+
 
 export default function DashboardLayout({
   children,
@@ -22,39 +24,55 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const pathname = usePathname();
+
+  const isActiveRoute = (href: string) => {
+    if (href === '/dashboard') {
+      return pathname === '/dashboard';
+    }
+    return pathname.startsWith(href);
+  };
 
   const NavLink = ({
     href,
     icon: Icon,
     label,
-    isActive = false,
   }: {
     href: string;
     icon: any;
     label: string;
-    isActive?: boolean;
-  }) => (
-    <Link
-      href={href}
-      className={`
-        group relative flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium
-        transition-all duration-200
-        ${isActive 
-          ? 'bg-gradient-to-r from-slate-900 to-slate-800 text-white shadow-lg shadow-slate-900/20' 
-          : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-        }
-      `}
-      onClick={() => setSidebarOpen(false)}
-    >
-      <Icon className={`h-5 w-5 transition-transform group-hover:scale-110 ${isActive ? 'text-white' : 'text-slate-400'}`} />
-      <span>{label}</span>
-      {isActive && (
-        <div className="absolute right-3">
-          <ChevronRight className="h-4 w-4" />
-        </div>
-      )}
-    </Link>
-  );
+  }) => {
+    const active = isActiveRoute(href);
+
+    return (
+      <Link
+        href={href}
+        className={`
+          group relative flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium
+          transition-all duration-200
+          ${
+            active
+              ? 'bg-slate-700 text-white shadow-lg shadow-slate-900/20'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+          }
+        `}
+        onClick={() => setSidebarOpen(false)}
+      >
+        <Icon
+          className={`h-5 w-5 transition-transform group-hover:scale-110 ${
+            active ? 'text-white' : 'text-slate-400'
+          }`}
+        />
+        <span>{label}</span>
+        {active && (
+          <div className="absolute right-3">
+            <ChevronRight className="h-4 w-4" />
+          </div>
+        )}
+      </Link>
+    );
+  };
+
 
   return (
     <div className="min-h-screen bg-slate-50 flex">
@@ -98,7 +116,7 @@ export default function DashboardLayout({
               <p className="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
                 Main
               </p>
-              <NavLink href="/dashboard" icon={Home} label="Overview" isActive />
+              <NavLink href="/dashboard" icon={Home} label="Overview" />
             </div>
 
             <div className="mb-4">
@@ -124,7 +142,7 @@ export default function DashboardLayout({
 
           {/* Footer - Upgrade Card */}
           <div className="p-4 border-t border-slate-200">
-            <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl p-4 text-white relative overflow-hidden">
+            <div className="bg-gradient-to-br from-slate-700 to-slate-600 rounded-xl p-4 text-white relative overflow-hidden">
               <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-10 -mt-10" />
               <div className="relative">
                 <p className="text-xs font-semibold mb-1 text-slate-300">Free Plan</p>
