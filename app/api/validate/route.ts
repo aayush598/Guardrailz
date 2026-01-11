@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { text, profileId, validationType = 'input' } = await req.json();
+    const { text, profileName, validationType = 'input' } = await req.json();
 
     if (!text) {
       return NextResponse.json({ error: 'Text is required' }, { status: 400 });
@@ -42,9 +42,10 @@ export async function POST(req: NextRequest) {
       .select()
       .from(profiles)
       .where(
-        profileId
-          ? eq(profiles.id, profileId)
-          : and(eq(profiles.name, 'default'), eq(profiles.isBuiltIn, true))
+        and(
+          eq(profiles.name, profileName),
+          eq(profiles.userId, key.userId)
+        )
       )
       .limit(1);
 
