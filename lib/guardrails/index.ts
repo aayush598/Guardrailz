@@ -11,6 +11,7 @@ import { DangerousPatternsGuardrail } from './input/dangerous-patterns.guardrail
 import { LanguageRestrictionGuardrail } from './input/language-restriction.guardrail';
 import { PromptInjectionSignatureGuardrail } from './input/prompt-injection.guardrail';
 import { SystemPromptLeakGuardrail } from './input/system-prompt-leak.guardrail';
+import { CrossContextManipulationGuardrail } from './input/cross-context-manipulation.guardrail';
 
 import { OutputPIIRedactionGuardrail } from './output/pii-redaction.guardrail';
 import { ToolAccessControlGuardrail } from './tool/tool-access.guardrail';
@@ -30,6 +31,10 @@ guardrailRegistry.register(
   (c) => new PromptInjectionSignatureGuardrail(c),
 );
 guardrailRegistry.register('SystemPromptLeak', (c) => new SystemPromptLeakGuardrail(c));
+guardrailRegistry.register(
+  'CrossContextManipulation',
+  (c) => new CrossContextManipulationGuardrail(c),
+);
 
 // Output
 guardrailRegistry.register('OutputPIIRedaction', (c) => new OutputPIIRedactionGuardrail(c));
