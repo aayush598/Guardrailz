@@ -18,6 +18,7 @@ import { OverrideInstructionGuardrail } from './input/override-instruction.guard
 
 import { OutputPIIRedactionGuardrail } from './output/pii-redaction.guardrail';
 import { ToolAccessControlGuardrail } from './tool/tool-access.guardrail';
+import { SecretLeakOutputGuardrail } from './output/secret-leak-output.guardrail';
 
 // Input
 guardrailRegistry.register('InputSize', (c) => new InputSizeGuardrail(c));
@@ -45,3 +46,4 @@ guardrailRegistry.register('OverrideInstruction', (c) => new OverrideInstruction
 // Output
 guardrailRegistry.register('OutputPIIRedaction', (c) => new OutputPIIRedactionGuardrail(c));
 guardrailRegistry.register('ToolAccess', (c) => new ToolAccessControlGuardrail(c));
+guardrailRegistry.register('SecretLeakOutput', (c) => new SecretLeakOutputGuardrail(c));
