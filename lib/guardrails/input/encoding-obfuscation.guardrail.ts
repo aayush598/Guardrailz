@@ -1,13 +1,11 @@
 import { BaseGuardrail } from '../core/base';
-import { GuardrailContext } from '../core/context';
-import { GuardrailAction, GuardrailSeverity } from '../core/types';
 
 /* -------------------------------------------------------------------------- */
 /* Config                                                                      */
 /* -------------------------------------------------------------------------- */
 export interface EncodingObfuscationConfig {
-  blockOnDecode?: boolean;      // default true
-  minEncodedLength?: number;    // default 16
+  blockOnDecode?: boolean; // default true
+  minEncodedLength?: number; // default 16
   confidenceThreshold?: number; // default 0.7
 }
 
@@ -24,7 +22,7 @@ export class EncodingObfuscationGuardrail extends BaseGuardrail<EncodingObfuscat
     });
   }
 
-  execute(text: string, _context: GuardrailContext) {
+  execute(text: string) {
     if (!text || typeof text !== 'string') {
       return this.result({
         passed: true,
@@ -135,13 +133,13 @@ export class EncodingObfuscationGuardrail extends BaseGuardrail<EncodingObfuscat
       '5': 's',
       '7': 't',
       '@': 'a',
-      '$': 's',
+      $: 's',
     };
 
     return text
       .toLowerCase()
       .split('')
-      .map(c => map[c] ?? c)
+      .map((c) => map[c] ?? c)
       .join('');
   }
 

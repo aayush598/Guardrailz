@@ -1,5 +1,4 @@
 import { BaseGuardrail } from '../core/base';
-import { GuardrailContext } from '../core/context';
 
 interface SecretPattern {
   name: string;
@@ -22,7 +21,7 @@ export class SecretsInInputGuardrail extends BaseGuardrail {
     super('SecretsInInputGuardrail', 'input', config);
   }
 
-  execute(text: string, _context: GuardrailContext) {
+  execute(text: string) {
     const findings: Array<{ type: string; masked: string }> = [];
 
     for (const pattern of this.patterns) {

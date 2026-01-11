@@ -8,14 +8,11 @@ async function main() {
   const connection = postgres(connectionString, { max: 1 });
   const db = drizzle(connection);
 
-  console.log('Running migrations...');
   await migrate(db, { migrationsFolder: './drizzle' });
-  console.log('Migrations complete!');
 
   await connection.end();
 }
 
-main().catch((err) => {
-  console.error('Migration failed:', err);
+main().catch(() => {
   process.exit(1);
 });

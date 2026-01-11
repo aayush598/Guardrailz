@@ -1,7 +1,5 @@
-import { db } from '@/lib/db';
-
 /* Replace with real queries */
-export async function getAnalytics(userId: string, range: string) {
+export async function getAnalytics() {
   return {
     overview: {
       totalExecutions: 12034,

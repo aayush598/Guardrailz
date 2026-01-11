@@ -1,51 +1,19 @@
 export const dynamic = 'force-dynamic';
 
-import { NextResponse } from "next/server";
-import { currentUser } from "@clerk/nextjs/server";
-import { db } from "@/lib/db";
-import {
-  users,
-  rateLimitTracking,
-  guardrailExecutions,
-} from "@/lib/db/schema";
-import { eq, and, gte, sql } from "drizzle-orm";
-
-/* ---------------- helper ---------------- */
-
-async function getOrCreateUser(clerkUser: any) {
-  const [u] = await db
-    .select()
-    .from(users)
-    .where(eq(users.id, clerkUser.id))
-    .limit(1);
-
-  if (u) return u;
-
-  const [created] = await db
-    .insert(users)
-    .values({
-      id: clerkUser.id,
-      email: clerkUser.emailAddresses[0]?.emailAddress ?? "",
-      firstName: clerkUser.firstName,
-      lastName: clerkUser.lastName,
-    })
-    .returning();
-
-  return created;
-}
+import { NextResponse } from 'next/server';
+import { currentUser } from '@clerk/nextjs/server';
+import { db } from '@/lib/db';
+import { rateLimitTracking, guardrailExecutions } from '@/lib/db/schema';
+import { eq, and, gte, sql } from 'drizzle-orm';
 
 /* ---------------- route ---------------- */
 
-export async function GET(
-  _req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET(_req: Request, { params }: { params: { id: string } }) {
   const clerkUser = await currentUser();
   if (!clerkUser) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const user = await getOrCreateUser(clerkUser);
   const apiKeyId = params.id;
 
   const now = new Date();
@@ -63,9 +31,9 @@ export async function GET(
     .where(
       and(
         eq(rateLimitTracking.apiKeyId, apiKeyId),
-        eq(rateLimitTracking.windowType, "minute"),
-        gte(rateLimitTracking.windowStart, oneHourAgo)
-      )
+        eq(rateLimitTracking.windowType, 'minute'),
+        gte(rateLimitTracking.windowStart, oneHourAgo),
+      ),
     )
     .orderBy(rateLimitTracking.windowStart);
 
@@ -79,9 +47,9 @@ export async function GET(
     .where(
       and(
         eq(rateLimitTracking.apiKeyId, apiKeyId),
-        eq(rateLimitTracking.windowType, "minute"),
-        gte(rateLimitTracking.windowStart, oneDayAgo)
-      )
+        eq(rateLimitTracking.windowType, 'minute'),
+        gte(rateLimitTracking.windowStart, oneDayAgo),
+      ),
     )
     .groupBy(sql`1`)
     .orderBy(sql`1`);
@@ -96,9 +64,9 @@ export async function GET(
     .where(
       and(
         eq(rateLimitTracking.apiKeyId, apiKeyId),
-        eq(rateLimitTracking.windowType, "day"),
-        gte(rateLimitTracking.windowStart, sevenDaysAgo)
-      )
+        eq(rateLimitTracking.windowType, 'day'),
+        gte(rateLimitTracking.windowStart, sevenDaysAgo),
+      ),
     )
     .orderBy(rateLimitTracking.windowStart);
 
@@ -112,8 +80,8 @@ export async function GET(
     .where(
       and(
         eq(guardrailExecutions.apiKeyId, apiKeyId),
-        gte(guardrailExecutions.createdAt, oneDayAgo)
-      )
+        gte(guardrailExecutions.createdAt, oneDayAgo),
+      ),
     )
     .groupBy(guardrailExecutions.passed);
 

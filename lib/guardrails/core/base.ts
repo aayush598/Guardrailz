@@ -1,5 +1,4 @@
-import { GuardrailContext } from './context';
-import { GuardrailResult,GuardrailStage, GuardrailSeverity, GuardrailAction } from './types';
+import { GuardrailResult, GuardrailStage } from './types';
 
 export abstract class BaseGuardrail<Config = any> {
   readonly name: string;
@@ -12,14 +11,9 @@ export abstract class BaseGuardrail<Config = any> {
     this.config = config;
   }
 
-  abstract execute(
-    text: string,
-    context: GuardrailContext
-  ): Promise<GuardrailResult> | GuardrailResult;
+  abstract execute(): Promise<GuardrailResult> | GuardrailResult;
 
-  protected result(
-    partial: Omit<GuardrailResult, 'guardrailName'>
-  ): GuardrailResult {
+  protected result(partial: Omit<GuardrailResult, 'guardrailName'>): GuardrailResult {
     return {
       guardrailName: this.name,
       ...partial,

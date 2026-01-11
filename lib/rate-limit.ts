@@ -1,6 +1,6 @@
 import { db } from './db';
-import { rateLimitTracking, apiKeys, userRateLimits, users } from './db/schema';
-import { eq, and, gte } from 'drizzle-orm';
+import { rateLimitTracking, apiKeys, userRateLimits } from './db/schema';
+import { eq, and } from 'drizzle-orm';
 
 export interface RateLimitResult {
   allowed: boolean;
@@ -12,41 +12,29 @@ export interface RateLimitResult {
 }
 
 function utcMinuteBucket(date: Date) {
-  return new Date(Date.UTC(
-    date.getUTCFullYear(),
-    date.getUTCMonth(),
-    date.getUTCDate(),
-    date.getUTCHours(),
-    date.getUTCMinutes(),
-    0,
-    0
-  ));
+  return new Date(
+    Date.UTC(
+      date.getUTCFullYear(),
+      date.getUTCMonth(),
+      date.getUTCDate(),
+      date.getUTCHours(),
+      date.getUTCMinutes(),
+      0,
+      0,
+    ),
+  );
 }
 
 function utcDayBucket(date: Date) {
-  return new Date(Date.UTC(
-    date.getUTCFullYear(),
-    date.getUTCMonth(),
-    date.getUTCDate(),
-    0,
-    0,
-    0,
-    0
-  ));
+  return new Date(
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0, 0),
+  );
 }
 
-
-export async function checkRateLimit(
-  apiKeyId: string,
-  userId: string
-): Promise<RateLimitResult> {
+export async function checkRateLimit(apiKeyId: string, userId: string): Promise<RateLimitResult> {
   try {
     // Get API key limits
-    const [apiKey] = await db
-      .select()
-      .from(apiKeys)
-      .where(eq(apiKeys.id, apiKeyId))
-      .limit(1);
+    const [apiKey] = await db.select().from(apiKeys).where(eq(apiKeys.id, apiKeyId)).limit(1);
 
     if (!apiKey) {
       return { allowed: false, reason: 'Invalid API key' };
@@ -72,7 +60,7 @@ export async function checkRateLimit(
     }
 
     const now = new Date();
-    
+
     // Check per-minute limit (API key)
     const minuteBucket = utcMinuteBucket(now);
     const [minuteTracking] = await db
@@ -82,8 +70,8 @@ export async function checkRateLimit(
         and(
           eq(rateLimitTracking.apiKeyId, apiKeyId),
           eq(rateLimitTracking.windowType, 'minute'),
-          eq(rateLimitTracking.windowStart, minuteBucket)
-        )
+          eq(rateLimitTracking.windowStart, minuteBucket),
+        ),
       )
       .limit(1);
 
@@ -108,8 +96,8 @@ export async function checkRateLimit(
         and(
           eq(rateLimitTracking.apiKeyId, apiKeyId),
           eq(rateLimitTracking.windowType, 'day'),
-          eq(rateLimitTracking.windowStart, dayBucket)
-        )
+          eq(rateLimitTracking.windowStart, dayBucket),
+        ),
       )
       .limit(1);
 
@@ -133,8 +121,8 @@ export async function checkRateLimit(
         and(
           eq(rateLimitTracking.userId, userId),
           eq(rateLimitTracking.windowType, 'minute'),
-          eq(rateLimitTracking.windowStart, minuteBucket)
-        )
+          eq(rateLimitTracking.windowStart, minuteBucket),
+        ),
       );
 
     const userMinuteCount = userMinuteTracking.reduce((sum, t) => sum + t.requestCount, 0);
@@ -156,8 +144,8 @@ export async function checkRateLimit(
         and(
           eq(rateLimitTracking.userId, userId),
           eq(rateLimitTracking.windowType, 'day'),
-          eq(rateLimitTracking.windowStart, dayBucket)
-        )
+          eq(rateLimitTracking.windowStart, dayBucket),
+        ),
       );
 
     const userDayCount = userDayTracking.reduce((sum, t) => sum + t.requestCount, 0);
@@ -183,7 +171,6 @@ export async function checkRateLimit(
       },
     };
   } catch (error) {
-    console.error('Rate limit check error:', error);
     return { allowed: false, reason: 'Rate limit check failed' };
   }
 }
@@ -200,8 +187,8 @@ async function incrementRateLimit(apiKeyId: string, userId: string, now: Date) {
       and(
         eq(rateLimitTracking.apiKeyId, apiKeyId),
         eq(rateLimitTracking.windowType, 'minute'),
-        eq(rateLimitTracking.windowStart, minuteStart)
-      )
+        eq(rateLimitTracking.windowStart, minuteStart),
+      ),
     )
     .limit(1);
 
@@ -228,8 +215,8 @@ async function incrementRateLimit(apiKeyId: string, userId: string, now: Date) {
       and(
         eq(rateLimitTracking.apiKeyId, apiKeyId),
         eq(rateLimitTracking.windowType, 'day'),
-        eq(rateLimitTracking.windowStart, dayStart)
-      )
+        eq(rateLimitTracking.windowStart, dayStart),
+      ),
     )
     .limit(1);
 
@@ -249,8 +236,5 @@ async function incrementRateLimit(apiKeyId: string, userId: string, now: Date) {
   }
 
   // Update last used timestamp
-  await db
-    .update(apiKeys)
-    .set({ lastUsedAt: now })
-    .where(eq(apiKeys.id, apiKeyId));
+  await db.update(apiKeys).set({ lastUsedAt: now }).where(eq(apiKeys.id, apiKeyId));
 }

@@ -1,5 +1,4 @@
 import { BaseGuardrail } from '../core/base';
-import { GuardrailContext } from '../core/context';
 
 interface PIIPattern {
   name: string;
@@ -40,7 +39,7 @@ export class OutputPIIRedactionGuardrail extends BaseGuardrail {
     super('OutputPIIRedactionGuardrail', 'output', config);
   }
 
-  execute(text: string, _context: GuardrailContext) {
+  execute(text: string) {
     let redactedText = text;
     const redactions: Array<{ type: string; count: number }> = [];
 

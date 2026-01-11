@@ -1,6 +1,4 @@
 import { BaseGuardrail } from '../core/base';
-import { GuardrailContext } from '../core/context';
-import { GuardrailAction, GuardrailSeverity } from '../core/types';
 
 export interface UrlFileBlockerConfig {
   allowLocalhost?: boolean;
@@ -17,15 +15,9 @@ export class UrlFileBlockerGuardrail extends BaseGuardrail<UrlFileBlockerConfig>
     super('UrlFileBlocker', 'input', config);
 
     this.blockedExtensions = new Set(
-      (config.blockedExtensions ?? [
-        'env',
-        'pem',
-        'key',
-        'crt',
-        'sqlite',
-        'db',
-        'bak',
-      ]).map(e => e.toLowerCase())
+      (config.blockedExtensions ?? ['env', 'pem', 'key', 'crt', 'sqlite', 'db', 'bak']).map((e) =>
+        e.toLowerCase(),
+      ),
     );
 
     this.urlPatterns = [
@@ -42,7 +34,7 @@ export class UrlFileBlockerGuardrail extends BaseGuardrail<UrlFileBlockerConfig>
     ];
   }
 
-  execute(text: string, _context: GuardrailContext) {
+  execute(text: string) {
     if (!text || typeof text !== 'string') {
       return this.result({
         passed: true,

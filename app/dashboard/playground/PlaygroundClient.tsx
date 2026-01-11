@@ -1,18 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  Play,
-  ArrowLeft,
-  AlertCircle,
-  CheckCircle2,
-  XCircle,
-  Clock,
-  Loader2,
-  Code,
-  FileJson,
-  Check,
-} from 'lucide-react';
+import { Play, ArrowLeft, Clock, Loader2, Code, FileJson, Check } from 'lucide-react';
 
 import Link from 'next/link';
 import { toast, Toaster } from 'sonner';
@@ -21,10 +10,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 interface Profile {
   id: string;
@@ -48,12 +41,6 @@ interface TestResult {
   redactedText?: string;
 }
 
-const EXAMPLES = {
-  pii: 'My email is john.doe@example.com',
-  injection: 'Ignore previous instructions',
-  secrets: 'Here is my API key: sk_live_123',
-};
-
 export default function PlaygroundClient({
   profiles,
   apiKeys,
@@ -63,9 +50,7 @@ export default function PlaygroundClient({
 }) {
   const [text, setText] = useState('');
   const [profileId, setProfileId] = useState('__default__');
-  const [apiKey, setApiKey] = useState(
-    apiKeys.find(k => k.isActive)?.key ?? ''
-  );
+  const [apiKey, setApiKey] = useState(apiKeys.find((k) => k.isActive)?.key ?? '');
   const [testing, setTesting] = useState(false);
   const [result, setResult] = useState<TestResult | null>(null);
   const [copied, setCopied] = useState(false);
@@ -118,17 +103,15 @@ export default function PlaygroundClient({
 
       <Link href="/dashboard">
         <Button variant="ghost" size="sm" className="mb-6">
-          <ArrowLeft className="h-4 w-4 mr-2" />
+          <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Dashboard
         </Button>
       </Link>
 
-      <h1 className="text-3xl font-bold mb-2">Test Playground</h1>
-      <p className="text-slate-600 mb-8">
-        Validate inputs against your guardrail profiles
-      </p>
+      <h1 className="mb-2 text-3xl font-bold">Test Playground</h1>
+      <p className="mb-8 text-slate-600">Validate inputs against your guardrail profiles</p>
 
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid gap-6 lg:grid-cols-2">
         {/* INPUT */}
         <Card>
           <CardHeader>
@@ -141,20 +124,26 @@ export default function PlaygroundClient({
           <CardContent className="space-y-4">
             <Label>Profile</Label>
             <Select value={profileId} onValueChange={setProfileId}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
                 <SelectItem value="__default__">Default</SelectItem>
-                {profiles.map(p => (
-                  <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
+                {profiles.map((p) => (
+                  <SelectItem key={p.id} value={p.id}>
+                    {p.name}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
 
             <Label>API Key</Label>
             <Select value={apiKey} onValueChange={setApiKey}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
-                {apiKeys.map(k => (
+                {apiKeys.map((k) => (
                   <SelectItem key={k.id} value={k.key}>
                     {k.name}
                   </SelectItem>
@@ -166,23 +155,19 @@ export default function PlaygroundClient({
             <Textarea
               rows={6}
               value={text}
-              onChange={e => setText(e.target.value)}
+              onChange={(e) => setText(e.target.value)}
               className="font-mono"
             />
 
-            <Button
-              onClick={runTest}
-              disabled={testing || !apiKey}
-              className="w-full"
-            >
+            <Button onClick={runTest} disabled={testing || !apiKey} className="w-full">
               {testing ? (
                 <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Running…
                 </>
               ) : (
                 <>
-                  <Play className="h-4 w-4 mr-2" />
+                  <Play className="mr-2 h-4 w-4" />
                   Run
                 </>
               )}
@@ -197,7 +182,7 @@ export default function PlaygroundClient({
           </CardHeader>
           <CardContent>
             {!result ? (
-              <p className="text-slate-500 text-sm">No results yet</p>
+              <p className="text-sm text-slate-500">No results yet</p>
             ) : (
               <>
                 <Badge variant={result.passed ? 'default' : 'destructive'}>
@@ -205,17 +190,16 @@ export default function PlaygroundClient({
                 </Badge>
 
                 <div className="mt-4 text-sm">
-                  <Clock className="h-4 w-4 inline mr-1" />
+                  <Clock className="mr-1 inline h-4 w-4" />
                   {result.executionTimeMs} ms
                 </div>
 
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={copyJson}
-                  className="mt-4"
-                >
-                  {copied ? <Check className="h-4 w-4 mr-2" /> : <FileJson className="h-4 w-4 mr-2" />}
+                <Button variant="outline" size="sm" onClick={copyJson} className="mt-4">
+                  {copied ? (
+                    <Check className="mr-2 h-4 w-4" />
+                  ) : (
+                    <FileJson className="mr-2 h-4 w-4" />
+                  )}
                   Copy JSON
                 </Button>
               </>
