@@ -1,0 +1,132 @@
+# Core Concepts
+
+This section introduces the key concepts you need to understand when working with Guardrails.
+
+These concepts form the mental model of the system.
+
+---
+
+## Guardrail
+
+A **guardrail** is a unit of logic that evaluates content or context and produces a structured result.
+
+A guardrail:
+- Has a name and stage
+- Receives input and context
+- Returns a decision (allow, warn, block, modify)
+- Can attach metadata
+
+Examples:
+- Input size limits
+- Prompt injection detection
+- PII redaction
+- Tool access control
+
+---
+
+## Guardrail stages
+
+Guardrails run in specific stages:
+
+- **Input** – before the model is invoked
+- **Output** – after the model produces output
+- **Tool** – when tools or actions are executed
+- **General** – cross-cutting checks
+
+Stages allow precise control over when enforcement happens.
+
+---
+
+## Profile
+
+A **profile** is a collection of guardrails and configurations.
+
+Profiles allow you to:
+- Apply consistent policies
+- Switch behavior by use case
+- Manage complexity at scale
+
+Profiles can be:
+- Built-in
+- Organization-specific
+- User-specific
+- Environment-specific
+
+---
+
+## Guardrail result
+
+Each guardrail returns a structured result containing:
+
+- Pass/fail status
+- Action taken
+- Severity level
+- Optional message
+- Optional metadata
+
+Results are aggregated into a single execution response.
+
+---
+
+## Execution context
+
+The **execution context** provides additional information to guardrails, such as:
+
+- User identifiers
+- API key identifiers
+- Profile identifiers
+- Validation type (input/output)
+- Tool invocation data
+
+This enables context-aware enforcement.
+
+---
+
+## Analytics event
+
+An **analytics event** captures what happened during execution.
+
+Events include:
+- Guardrail execution events
+- Profile usage events
+- Rate-limit events
+
+Events power:
+- Dashboards
+- Alerts
+- Compliance reporting
+
+---
+
+## SDK client
+
+The **SDK client** is the developer-facing interface for interacting with Guardrails.
+
+It abstracts:
+- API calls
+- Authentication
+- Error handling
+- Retries and timeouts
+
+---
+
+## Putting it together
+
+In practice:
+
+1. A request is received
+2. A profile is resolved
+3. Guardrails are executed
+4. Results are enforced
+5. Analytics are recorded
+
+This flow repeats consistently across all use cases.
+
+---
+
+## Next steps
+
+- Try Guardrails quickly → **Quickstart**
+- Learn guardrails in depth → **Guardrails Overview**
+- Explore profiles → **Profiles Overview**
+

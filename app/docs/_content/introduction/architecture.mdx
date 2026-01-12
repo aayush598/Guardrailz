@@ -1,0 +1,129 @@
+# Architecture
+
+Guardrails is designed as a **layered, domain-driven system** that cleanly separates concerns while remaining highly extensible.
+
+This architecture enables Guardrails to scale from small projects to large enterprise platforms.
+
+---
+
+## High-level system overview
+
+At a high level, Guardrails consists of:
+
+1. **Guardrails Engine**
+2. **Profiles & Configuration**
+3. **Execution Pipeline**
+4. **Analytics & Observability**
+5. **SDK & API Layer**
+
+Each layer is independently evolvable.
+
+---
+
+## Guardrails Engine
+
+The engine is responsible for:
+
+- Registering guardrails
+- Executing them in order
+- Handling short-circuiting (e.g. blocking)
+- Producing structured results
+
+Key characteristics:
+
+- Stateless execution
+- Deterministic ordering
+- Typed inputs and outputs
+- Explicit execution stages (input, output, tool, general)
+
+---
+
+## Profiles & configuration
+
+Profiles define **which guardrails apply** and **how they are configured**.
+
+Examples:
+- Default production profile
+- Enterprise security profile
+- Child safety profile
+- Custom organization profiles
+
+Profiles are:
+- Versionable
+- Composable
+- Stored and compiled at runtime
+- Decoupled from execution logic
+
+---
+
+## Execution pipeline
+
+A typical execution flow:
+
+1. Input received
+2. Profile resolved
+3. Guardrails instantiated
+4. Guardrails executed sequentially
+5. Results aggregated
+6. Final decision returned
+
+The pipeline supports:
+- Blocking
+- Warning
+- Redaction
+- Modification
+- Telemetry emission
+
+---
+
+## Analytics & observability
+
+Every execution can emit structured analytics events, including:
+
+- Guardrail execution results
+- Latency metrics
+- Profile usage
+- Failure reasons
+
+Analytics is designed as:
+- Event-driven
+- Extensible
+- Queryable for dashboards
+- Safe for compliance use cases
+
+---
+
+## SDK & API layer
+
+The SDK provides:
+
+- Typed client interfaces
+- Retry and timeout handling
+- Consistent error modeling
+- Easy integration for developers
+
+The API layer:
+- Exposes validation and management endpoints
+- Enforces authentication and authorization
+- Serves as the integration boundary
+
+---
+
+## Architectural benefits
+
+This architecture enables:
+
+- Independent evolution of guardrails
+- Safe customization without forks
+- Enterprise-scale observability
+- SDKs for multiple languages
+- Long-term maintainability
+
+---
+
+## Next steps
+
+- Understand the building blocks → **Core Concepts**
+- Learn how guardrails are executed → **Guardrails Overview**
+- Explore analytics → **Analytics Overview**
+
