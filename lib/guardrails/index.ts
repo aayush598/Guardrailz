@@ -21,6 +21,7 @@ import { ToolAccessControlGuardrail } from './tool/tool-access.guardrail';
 import { SecretLeakOutputGuardrail } from './output/secret-leak-output.guardrail';
 import { InternalDataLeakGuardrail } from './output/internal-data-leak.guardrail';
 import { HallucinationRiskGuardrail } from './output/hallucination-risk.guardrail';
+import { ConfidentialityGuardrail } from './output/confidentiality.guardrail';
 
 // Input
 guardrailRegistry.register('InputSize', (c) => new InputSizeGuardrail(c));
@@ -51,3 +52,4 @@ guardrailRegistry.register('ToolAccess', (c) => new ToolAccessControlGuardrail(c
 guardrailRegistry.register('SecretLeakOutput', (c) => new SecretLeakOutputGuardrail(c));
 guardrailRegistry.register('InternalDataLeak', (c) => new InternalDataLeakGuardrail(c));
 guardrailRegistry.register('HallucinationRisk', (c) => new HallucinationRiskGuardrail(c));
+guardrailRegistry.register('Confidentiality', (c) => new ConfidentialityGuardrail(c));
