@@ -22,6 +22,7 @@ import { SecretLeakOutputGuardrail } from './output/secret-leak-output.guardrail
 import { InternalDataLeakGuardrail } from './output/internal-data-leak.guardrail';
 import { HallucinationRiskGuardrail } from './output/hallucination-risk.guardrail';
 import { ConfidentialityGuardrail } from './output/confidentiality.guardrail';
+import { OutputSchemaValidationGuardrail } from './output/output-schema-validation.guardrail';
 
 // Input
 guardrailRegistry.register('InputSize', (c) => new InputSizeGuardrail(c));
@@ -53,3 +54,4 @@ guardrailRegistry.register('SecretLeakOutput', (c) => new SecretLeakOutputGuardr
 guardrailRegistry.register('InternalDataLeak', (c) => new InternalDataLeakGuardrail(c));
 guardrailRegistry.register('HallucinationRisk', (c) => new HallucinationRiskGuardrail(c));
 guardrailRegistry.register('Confidentiality', (c) => new ConfidentialityGuardrail(c));
+guardrailRegistry.register('OutputSchemaValidation', (c) => new OutputSchemaValidationGuardrail(c));
