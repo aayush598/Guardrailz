@@ -27,6 +27,8 @@ import { CitationRequiredGuardrail } from './output/citation-required.guardrail'
 import { SandboxedOutputGuardrail } from './output/sandboxed-output.guardrail';
 import { QualityThresholdGuardrail } from './output/quality-threshold.guardrail';
 
+import { TelemetryEnforcementGuardrail } from './operational/telemetry-enforcement.guardrail';
+
 // Input
 guardrailRegistry.register('InputSize', (c) => new InputSizeGuardrail(c));
 guardrailRegistry.register('SecretsInInput', (c) => new SecretsInInputGuardrail(c));
@@ -61,3 +63,6 @@ guardrailRegistry.register('OutputSchemaValidation', (c) => new OutputSchemaVali
 guardrailRegistry.register('CitationRequired', (c) => new CitationRequiredGuardrail(c));
 guardrailRegistry.register('SandboxedOutput', (c) => new SandboxedOutputGuardrail(c));
 guardrailRegistry.register('QualityThreshold', (c) => new QualityThresholdGuardrail(c));
+
+// Operational
+guardrailRegistry.register('TelemetryEnforcement', (c) => new TelemetryEnforcementGuardrail(c));
