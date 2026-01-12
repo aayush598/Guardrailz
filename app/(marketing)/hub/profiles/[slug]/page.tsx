@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { PROFILES } from '@/lib/hub/profiles';
 import { GUARDRAILS } from '@/lib/hub/guardrails';
 import { Eye, Heart, Share2, Shield, ArrowLeft, CheckCircle, Package, Tag } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Button } from '@/shared/ui/button';
+import { Badge } from '@/shared/ui/badge';
 import { HubIcon } from '../../icon-map';
 
 export default function ProfileDetailPage({ params }: { params: { slug: string } }) {

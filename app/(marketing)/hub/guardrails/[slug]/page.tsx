@@ -1,8 +1,8 @@
 import { GUARDRAILS } from '@/lib/hub/guardrails';
 import { ArrowLeft, Eye, Heart, Share2, Tag, Shield, Clock, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Button } from '@/shared/ui/button';
+import { Badge } from '@/shared/ui/badge';
 import { HubIcon } from '../../icon-map';
 
 export default function GuardrailPage({ params }: { params: { slug: string } }) {

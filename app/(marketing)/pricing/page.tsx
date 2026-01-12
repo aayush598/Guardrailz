@@ -24,8 +24,8 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { ShieldCheck, Building2, Baby, HeartPulse, Landmark, Wrench } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent } from '@/shared/ui/card';
 import { useState, useEffect } from 'react';
 import { UserButton } from '@clerk/nextjs';
 

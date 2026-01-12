@@ -15,9 +15,9 @@ import {
 import { ArrowLeft, TrendingUp, Activity, Clock } from 'lucide-react';
 
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card';
+import { Badge } from '@/shared/ui/badge';
 
 export default function ApiKeyAnalyticsClient({ data }: { data: any }) {
   return (

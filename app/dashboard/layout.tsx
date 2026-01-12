@@ -13,7 +13,7 @@ import {
   X,
   ChevronRight,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 

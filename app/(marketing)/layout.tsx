@@ -1,7 +1,7 @@
 import './../globals.css';
 import { ClerkProvider } from '@clerk/nextjs';
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
-import { MarketingNavbar } from '@/components/ui/navbar';
+import { MarketingNavbar } from '@/shared/ui/navbar';
 
 const inter = Inter({
   subsets: ['latin'],

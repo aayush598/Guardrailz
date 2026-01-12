@@ -17,8 +17,8 @@ import {
   Grid3x3,
   Package,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Button } from '@/shared/ui/button';
+import { Badge } from '@/shared/ui/badge';
 import { HubIcon } from './icon-map';
 
 type SortBy = 'views' | 'likes' | 'shares' | 'name';

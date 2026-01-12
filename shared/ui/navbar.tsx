@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from 'next/navigation';
 import { useUser, UserButton } from '@clerk/nextjs';
 import { Shield, Menu, X, ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import { useEffect, useState } from 'react';
 
 export function MarketingNavbar() {
