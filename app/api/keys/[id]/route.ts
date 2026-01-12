@@ -1,38 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { currentUser } from '@clerk/nextjs/server';
+import { requireAuth } from '@/shared/auth';
 import { db } from '@/shared/db/client';
-import { users, apiKeys } from '@/shared/db/schema';
+import { apiKeys } from '@/shared/db/schema';
 import { eq, and } from 'drizzle-orm';
-
-// Helper to get or create user
-async function getOrCreateUser(clerkUser: any) {
-  const [existingUser] = await db.select().from(users).where(eq(users.id, clerkUser.id)).limit(1);
-
-  if (existingUser) {
-    return existingUser;
-  }
-
-  const [newUser] = await db
-    .insert(users)
-    .values({
-      id: clerkUser.id,
-      email: clerkUser.emailAddresses[0]?.emailAddress || '',
-      firstName: clerkUser.firstName,
-      lastName: clerkUser.lastName,
-    })
-    .returning();
-
-  return newUser;
-}
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const user = await currentUser();
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const dbUser = await getOrCreateUser(user);
+    const { dbUser } = await requireAuth();
 
     await db.delete(apiKeys).where(and(eq(apiKeys.id, params.id), eq(apiKeys.userId, dbUser.id)));
 
@@ -46,12 +20,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 }
 
 export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
-  const user = await currentUser();
-  if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  const dbUser = await getOrCreateUser(user);
+  const { dbUser } = await requireAuth();
   const body = await request.json();
 
   const update: any = {};

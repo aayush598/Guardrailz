@@ -1,25 +1,8 @@
 import { NextResponse } from 'next/server';
-import { currentUser } from '@clerk/nextjs/server';
+import { requireAuth } from '@/shared/auth';
 import { db } from '@/shared/db/client';
-import { users, rateLimitTracking } from '@/shared/db/schema';
+import { rateLimitTracking } from '@/shared/db/schema';
 import { eq, and } from 'drizzle-orm';
-
-async function getOrCreateUser(clerkUser: any) {
-  const [user] = await db.select().from(users).where(eq(users.id, clerkUser.id));
-  if (user) return user;
-
-  const [created] = await db
-    .insert(users)
-    .values({
-      id: clerkUser.id,
-      email: clerkUser.emailAddresses[0]?.emailAddress ?? '',
-      firstName: clerkUser.firstName,
-      lastName: clerkUser.lastName,
-    })
-    .returning();
-
-  return created;
-}
 
 function utcMinuteBucket(date: Date) {
   return new Date(
@@ -42,12 +25,7 @@ function utcDayBucket(date: Date) {
 }
 
 export async function GET() {
-  const clerkUser = await currentUser();
-  if (!clerkUser) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  const user = await getOrCreateUser(clerkUser);
+  const { dbUser } = await requireAuth();
   const now = new Date();
 
   const minuteBucket = utcMinuteBucket(now);
@@ -62,7 +40,7 @@ export async function GET() {
     .from(rateLimitTracking)
     .where(
       and(
-        eq(rateLimitTracking.userId, user.id),
+        eq(rateLimitTracking.userId, dbUser.id),
         eq(rateLimitTracking.windowStart, dayBucket), // covers day
       ),
     );
@@ -84,7 +62,7 @@ export async function GET() {
     .from(rateLimitTracking)
     .where(
       and(
-        eq(rateLimitTracking.userId, user.id),
+        eq(rateLimitTracking.userId, dbUser.id),
         eq(rateLimitTracking.windowType, 'minute'),
         eq(rateLimitTracking.windowStart, minuteBucket),
       ),

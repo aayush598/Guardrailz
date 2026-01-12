@@ -1,39 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { currentUser } from '@clerk/nextjs/server';
+import { requireAuth } from '@/shared/auth';
 import { db } from '@/shared/db/client';
-import { users, apiKeys } from '@/shared/db/schema';
-import { eq, desc, and } from 'drizzle-orm';
+import { apiKeys } from '@/shared/db/schema';
+import { eq, desc } from 'drizzle-orm';
 import { generateApiKey } from '@/lib/utils/api-key';
-
-// Helper to get or create user
-async function getOrCreateUser(clerkUser: any) {
-  const [existingUser] = await db.select().from(users).where(eq(users.id, clerkUser.id)).limit(1);
-
-  if (existingUser) {
-    return existingUser;
-  }
-
-  const [newUser] = await db
-    .insert(users)
-    .values({
-      id: clerkUser.id,
-      email: clerkUser.emailAddresses[0]?.emailAddress || '',
-      firstName: clerkUser.firstName,
-      lastName: clerkUser.lastName,
-    })
-    .returning();
-
-  return newUser;
-}
 
 export async function GET() {
   try {
-    const user = await currentUser();
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const dbUser = await getOrCreateUser(user);
+    // ✅ Centralized auth + DB user ensured
+    const { dbUser } = await requireAuth();
 
     const allKeys = await db
       .select()
@@ -43,6 +18,10 @@ export async function GET() {
 
     return NextResponse.json({ apiKeys: allKeys });
   } catch (error: any) {
+    if (error?.name === 'UnauthorizedError') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     return NextResponse.json(
       { error: 'Failed to fetch API keys', details: error.message },
       { status: 500 },
@@ -52,12 +31,9 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const user = await currentUser();
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    // ✅ Centralized auth + DB user ensured
+    const { dbUser } = await requireAuth();
 
-    const dbUser = await getOrCreateUser(user);
     const body = await request.json();
     const { name, requestsPerMinute = 100, requestsPerDay = 10000 } = body;
 
@@ -81,6 +57,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ apiKey: newKey });
   } catch (error: any) {
+    if (error?.name === 'UnauthorizedError') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     return NextResponse.json(
       { error: 'Failed to create API key', details: error.message },
       { status: 500 },

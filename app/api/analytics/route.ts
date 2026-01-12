@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic';
 
-import { currentUser } from '@clerk/nextjs/server';
+import { requireAuth } from '@/shared/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/shared/db/client';
 import { guardrailExecutions, profiles } from '@/shared/db/schema';
@@ -8,13 +8,9 @@ import { eq, and, gte, sql } from 'drizzle-orm';
 
 export async function GET(request: NextRequest) {
   try {
-    const user = await currentUser();
+    const { dbUser } = await requireAuth();
+    const userId = dbUser.id;
 
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const userId = user.id;
     const { searchParams } = new URL(request.url);
     const range = searchParams.get('range') || '7d';
 

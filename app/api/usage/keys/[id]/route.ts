@@ -1,40 +1,20 @@
 export const dynamic = 'force-dynamic';
 
 import { NextResponse } from 'next/server';
-import { currentUser } from '@clerk/nextjs/server';
+import { requireAuth } from '@/shared/auth';
 import { db } from '@/shared/db/client';
-import { users, rateLimitTracking, guardrailExecutions } from '@/shared/db/schema';
+import { rateLimitTracking, guardrailExecutions } from '@/shared/db/schema';
 import { eq, and, gte, sql } from 'drizzle-orm';
-
-/* ---------------- helper ---------------- */
-
-async function getOrCreateUser(clerkUser: any) {
-  const [u] = await db.select().from(users).where(eq(users.id, clerkUser.id)).limit(1);
-
-  if (u) return u;
-
-  const [created] = await db
-    .insert(users)
-    .values({
-      id: clerkUser.id,
-      email: clerkUser.emailAddresses[0]?.emailAddress ?? '',
-      firstName: clerkUser.firstName,
-      lastName: clerkUser.lastName,
-    })
-    .returning();
-
-  return created;
-}
+import { redirect } from 'next/navigation';
 
 /* ---------------- route ---------------- */
 
 export async function GET(_req: Request, { params }: { params: { id: string } }) {
-  const clerkUser = await currentUser();
-  if (!clerkUser) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  try {
+    await requireAuth();
+  } catch {
+    redirect('/sign-in');
   }
-
-  const user = await getOrCreateUser(clerkUser);
   const apiKeyId = params.id;
 
   const now = new Date();

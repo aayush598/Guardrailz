@@ -1,54 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { currentUser } from '@clerk/nextjs/server';
+import { requireAuth } from '@/shared/auth';
 import { db } from '@/shared/db/client';
-import { users, profiles } from '@/shared/db/schema';
-import { eq } from 'drizzle-orm';
+import { profiles } from '@/shared/db/schema';
 import { ProfileService } from '@/modules/profiles/service/profile.service';
 
-// Helper to get or create user
-async function getOrCreateUser(clerkUser: any) {
-  const [existingUser] = await db.select().from(users).where(eq(users.id, clerkUser.id)).limit(1);
-
-  if (existingUser) {
-    return existingUser;
-  }
-
-  const [newUser] = await db
-    .insert(users)
-    .values({
-      id: clerkUser.id,
-      email: clerkUser.emailAddresses[0]?.emailAddress || '',
-      firstName: clerkUser.firstName,
-      lastName: clerkUser.lastName,
-    })
-    .returning();
-
-  return newUser;
-}
-
 export async function GET() {
-  const clerkUser = await currentUser();
-  if (!clerkUser) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  const user = await getOrCreateUser(clerkUser);
+  const { dbUser } = await requireAuth();
   const service = new ProfileService();
 
-  await service.ensureBuiltIns(user.id);
+  await service.ensureBuiltIns(dbUser.id);
 
-  const profiles = await service.getRuntimeProfiles(user.id);
+  const profiles = await service.getRuntimeProfiles(dbUser.id);
   return NextResponse.json({ profiles });
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const user = await currentUser();
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const dbUser = await getOrCreateUser(user);
+    const { dbUser } = await requireAuth();
     const body = await request.json();
     const { name, description, inputGuardrails, outputGuardrails, toolGuardrails } = body;
 

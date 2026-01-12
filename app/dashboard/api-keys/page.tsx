@@ -1,17 +1,16 @@
-import { currentUser } from '@clerk/nextjs/server';
+import { requireAuth } from '@/shared/auth';
 import { db } from '@/shared/db/client';
 import { apiKeys } from '@/shared/db/schema';
 import { eq } from 'drizzle-orm';
 import ApiKeysClient from './ApiKeysClient';
 
 export default async function ApiKeysPage() {
-  const user = await currentUser();
-  if (!user) throw new Error('Unauthorized');
+  const { dbUser } = await requireAuth();
 
   const keys = await db
     .select()
     .from(apiKeys)
-    .where(eq(apiKeys.userId, user.id))
+    .where(eq(apiKeys.userId, dbUser.id))
     .orderBy(apiKeys.createdAt);
 
   const serializedKeys = keys.map((k) => ({

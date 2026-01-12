@@ -1,40 +1,14 @@
 export const dynamic = 'force-dynamic';
 
 import { NextResponse } from 'next/server';
-import { currentUser } from '@clerk/nextjs/server';
+import { requireAuth } from '@/shared/auth';
 import { db } from '@/shared/db/client';
-import { users, guardrailExecutions, userRateLimits, rateLimitTracking } from '@/shared/db/schema';
+import { guardrailExecutions, userRateLimits, rateLimitTracking } from '@/shared/db/schema';
 import { eq, and, desc, gte, sql } from 'drizzle-orm';
-
-// Helper to get or create user
-async function getOrCreateUser(clerkUser: any) {
-  const [existingUser] = await db.select().from(users).where(eq(users.id, clerkUser.id)).limit(1);
-
-  if (existingUser) {
-    return existingUser;
-  }
-
-  const [newUser] = await db
-    .insert(users)
-    .values({
-      id: clerkUser.id,
-      email: clerkUser.emailAddresses[0]?.emailAddress || '',
-      firstName: clerkUser.firstName,
-      lastName: clerkUser.lastName,
-    })
-    .returning();
-
-  return newUser;
-}
 
 export async function GET() {
   try {
-    const user = await currentUser();
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const dbUser = await getOrCreateUser(user);
+    const { dbUser } = await requireAuth();
 
     // Get total executions
     const totalExecutionsResult = await db

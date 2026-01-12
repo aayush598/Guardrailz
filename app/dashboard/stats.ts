@@ -1,5 +1,5 @@
 // app/dashboard/stats.ts
-import { currentUser } from '@clerk/nextjs/server';
+import { requireAuth } from '@/shared/auth';
 import { unstable_cache } from 'next/cache';
 import { db } from '@/shared/db/client';
 import { guardrailExecutions, apiKeys, profiles } from '@/shared/db/schema';
@@ -8,10 +8,9 @@ import { and, desc, eq, gte, sql } from 'drizzle-orm';
 /* ---------------- PUBLIC ENTRY ---------------- */
 
 export async function getDashboardStats() {
-  const user = await currentUser();
-  if (!user) throw new Error('Unauthorized');
+  const { dbUser } = await requireAuth();
 
-  return getDashboardStatsCached(user.id);
+  return getDashboardStatsCached(dbUser.id);
 }
 
 /* ---------------- CACHED CORE ---------------- */

@@ -1,13 +1,16 @@
-import { currentUser } from '@clerk/nextjs/server';
-import { notFound } from 'next/navigation';
+import { requireAuth } from '@/shared/auth';
+import { redirect } from 'next/navigation';
 import { db } from '@/shared/db/client';
 import { rateLimitTracking, guardrailExecutions } from '@/shared/db/schema';
 import { and, eq, gte, sql } from 'drizzle-orm';
 import ApiKeyAnalyticsClient from './ApiKeyAnalyticsClient';
 
 export default async function ApiKeyAnalyticsPage({ params }: { params: { id: string } }) {
-  const clerkUser = await currentUser();
-  if (!clerkUser) throw new Error('Unauthorized');
+  try {
+    await requireAuth();
+  } catch {
+    redirect('/sign-in');
+  }
 
   const apiKeyId = params.id;
 

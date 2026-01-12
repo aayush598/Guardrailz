@@ -1,14 +1,11 @@
-import { currentUser } from '@clerk/nextjs/server';
+import { requireAuth } from '@/shared/auth';
 import { db } from '@/shared/db/client';
 import { profiles, apiKeys } from '@/shared/db/schema';
 import { eq } from 'drizzle-orm';
 import PlaygroundClient from './PlaygroundClient';
 
 export default async function PlaygroundPage() {
-  const user = await currentUser();
-  if (!user) {
-    throw new Error('Unauthorized');
-  }
+  const { dbUser } = await requireAuth();
 
   const [profilesData, apiKeysData] = await Promise.all([
     db
@@ -18,7 +15,7 @@ export default async function PlaygroundPage() {
         description: profiles.description,
       })
       .from(profiles)
-      .where(eq(profiles.userId, user.id)),
+      .where(eq(profiles.userId, dbUser.id)),
 
     db
       .select({
@@ -28,7 +25,7 @@ export default async function PlaygroundPage() {
         isActive: apiKeys.isActive,
       })
       .from(apiKeys)
-      .where(eq(apiKeys.userId, user.id)),
+      .where(eq(apiKeys.userId, dbUser.id)),
   ]);
 
   return <PlaygroundClient profiles={profilesData} apiKeys={apiKeysData} />;
