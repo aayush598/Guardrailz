@@ -51,6 +51,7 @@ import { DefamationGuardrail } from './content/defamation.guardrail';
 import { MedicalAdviceGuardrail } from './content/medical-advice.guardrail';
 import { PoliticalPersuasionGuardrail } from './input/political-persuasion.guardrail';
 import { ViolenceGuardrail } from './content/violence.guardrail';
+import { SelfHarmGuardrail } from './input/self-harm.guardrail';
 
 // Input
 guardrailRegistry.register('InputSize', (c) => new InputSizeGuardrail(c));
@@ -123,3 +124,4 @@ guardrailRegistry.register('Defamation', (c) => new DefamationGuardrail(c));
 guardrailRegistry.register('MedicalAdvice', (c) => new MedicalAdviceGuardrail(c));
 guardrailRegistry.register('PoliticalPersuasion', (c) => new PoliticalPersuasionGuardrail(c));
 guardrailRegistry.register('Violence', (c) => new ViolenceGuardrail(c));
+guardrailRegistry.register('SelfHarm', (c) => new SelfHarmGuardrail(c));
