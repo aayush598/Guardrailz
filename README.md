@@ -64,11 +64,10 @@ DATABASE_URL=your_postgres_url
 
 ```bash
 # Generate migration
-npx drizzle-kit generate
+npm run db:generate
 
 # Apply migration
-export DATABASE_URL='your_connection_string'
-npx tsx scripts/migrate.ts
+npm run db:migrate
 ```
 
 ### Run Development Server
