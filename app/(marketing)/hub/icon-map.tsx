@@ -1,18 +1,6 @@
-import {
-  Shield,
-  Package,
-  Heart,
-  Grid3x3,
-  Lock,
-} from 'lucide-react';
+import { Shield, Package, Heart, Grid3x3, Lock } from 'lucide-react';
 
-export const HubIcon = ({
-  name,
-  className,
-}: {
-  name: string;
-  className?: string;
-}) => {
+export const HubIcon = ({ name, className }: { name: string; className?: string }) => {
   switch (name) {
     case 'shield':
       return <Shield className={className} />;

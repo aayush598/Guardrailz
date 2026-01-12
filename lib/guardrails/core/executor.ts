@@ -1,12 +1,12 @@
-import { guardrailRegistry } from "./registry";
-import type { GuardrailResult } from "./types";
+import { guardrailRegistry } from './registry';
+import type { GuardrailResult } from './types';
 import type { GuardrailContext } from './context';
-import { BaseGuardrail } from "./base";
+import { BaseGuardrail } from './base';
 
 export async function executeGuardrails(
   guardrails: BaseGuardrail[],
   text: string,
-  context: GuardrailContext = {}
+  context: GuardrailContext = {},
 ) {
   const start = Date.now();
 
@@ -33,13 +33,13 @@ export async function executeGuardrails(
     }
   }
   return {
-    passed: results.every(r => r.passed),
+    passed: results.every((r) => r.passed),
     results,
     executionTimeMs: Date.now() - start,
     summary: {
       total: results.length,
-      passed: results.filter(r => r.passed).length,
-      failed: results.filter(r => !r.passed).length,
+      passed: results.filter((r) => r.passed).length,
+      failed: results.filter((r) => !r.passed).length,
     },
   };
 }

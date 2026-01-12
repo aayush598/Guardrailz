@@ -41,7 +41,6 @@ export type HubTag =
   | 'enterprise'
   | 'finance';
 
-
 export interface HubStats {
   views: number;
   likes: number;

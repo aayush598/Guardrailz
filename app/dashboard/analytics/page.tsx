@@ -14,10 +14,5 @@ export default async function AnalyticsPage({
 
   const analytics = await getAnalytics(user.id, range);
 
-  return (
-    <AnalyticsClient
-      analytics={analytics}
-      range={range}
-    />
-  );
+  return <AnalyticsClient analytics={analytics} range={range} />;
 }

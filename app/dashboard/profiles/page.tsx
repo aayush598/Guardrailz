@@ -10,10 +10,7 @@ export default async function ProfilesPage() {
     throw new Error('Unauthorized');
   }
 
-  const data = await db
-    .select()
-    .from(profiles)
-    .where(eq(profiles.userId, user.id));
+  const data = await db.select().from(profiles).where(eq(profiles.userId, user.id));
 
   return <ProfilesClient profiles={data} />;
 }

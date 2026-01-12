@@ -31,10 +31,5 @@ export default async function PlaygroundPage() {
       .where(eq(apiKeys.userId, user.id)),
   ]);
 
-  return (
-    <PlaygroundClient
-      profiles={profilesData}
-      apiKeys={apiKeysData}
-    />
-  );
+  return <PlaygroundClient profiles={profilesData} apiKeys={apiKeysData} />;
 }

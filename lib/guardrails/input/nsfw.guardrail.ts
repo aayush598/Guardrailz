@@ -13,10 +13,7 @@
 
 import { BaseGuardrail } from '../core/base';
 import { GuardrailContext } from '../core/context';
-import {
-  GuardrailAction,
-  GuardrailSeverity,
-} from '../core/types';
+import { GuardrailAction, GuardrailSeverity } from '../core/types';
 
 /* ---------------------------------------------------------------------------
  * Severity Levels
@@ -111,9 +108,25 @@ export class NSFWAdvancedGuardrail extends BaseGuardrail<NSFWGuardrailConfig> {
     if (blockSignal) signals.push(blockSignal);
 
     // 2. Pattern tiers
-    signals.push(...this.checkTier(normalized, this.level3Explicit, NSFWSeverityLevel.LEVEL_3_CRITICAL, 0.95));
-    signals.push(...this.checkTier(normalized, this.level2Contextual, NSFWSeverityLevel.LEVEL_2_CONTEXTUAL, 0.75));
-    signals.push(...this.checkTier(normalized, this.level1Restricted, NSFWSeverityLevel.LEVEL_1_RESTRICTED, 0.6));
+    signals.push(
+      ...this.checkTier(normalized, this.level3Explicit, NSFWSeverityLevel.LEVEL_3_CRITICAL, 0.95),
+    );
+    signals.push(
+      ...this.checkTier(
+        normalized,
+        this.level2Contextual,
+        NSFWSeverityLevel.LEVEL_2_CONTEXTUAL,
+        0.75,
+      ),
+    );
+    signals.push(
+      ...this.checkTier(
+        normalized,
+        this.level1Restricted,
+        NSFWSeverityLevel.LEVEL_1_RESTRICTED,
+        0.6,
+      ),
+    );
 
     // 3. Obfuscation
     if (this.config.enableObfuscationDetection !== false) {
@@ -121,9 +134,8 @@ export class NSFWAdvancedGuardrail extends BaseGuardrail<NSFWGuardrailConfig> {
     }
 
     // 4. Context analysis
-    let contextModifier = this.config.enableContextAnalysis === false
-      ? 1.0
-      : this.analyzeContext(normalized, context);
+    let contextModifier =
+      this.config.enableContextAnalysis === false ? 1.0 : this.analyzeContext(normalized, context);
 
     // 5. Medical/Educational exemption
     if (
@@ -134,11 +146,7 @@ export class NSFWAdvancedGuardrail extends BaseGuardrail<NSFWGuardrailConfig> {
     }
 
     // 6. Ensemble decision
-    const decision = this.makeDecision(
-      signals,
-      contextModifier,
-      context
-    );
+    const decision = this.makeDecision(signals, contextModifier, context);
 
     // 7. Final result
     return this.buildResult(decision, signals, text, context);
@@ -171,7 +179,7 @@ export class NSFWAdvancedGuardrail extends BaseGuardrail<NSFWGuardrailConfig> {
     content: string,
     tier: Record<string, RegExp[]>,
     severity: NSFWSeverityLevel,
-    confidence: number
+    confidence: number,
   ): NSFWDetectionSignal[] {
     const signals: NSFWDetectionSignal[] = [];
     for (const [category, patterns] of Object.entries(tier)) {
@@ -228,13 +236,13 @@ export class NSFWAdvancedGuardrail extends BaseGuardrail<NSFWGuardrailConfig> {
   private analyzeContext(content: string, context: GuardrailContext): number {
     let modifier = 1.0;
 
-    const medicalHits = this.medicalIndicators.filter(r => r.test(content)).length;
-    const eduHits = this.educationalIndicators.filter(r => r.test(content)).length;
+    const medicalHits = this.medicalIndicators.filter((r) => r.test(content)).length;
+    const eduHits = this.educationalIndicators.filter((r) => r.test(content)).length;
 
     if (medicalHits >= 2 || eduHits >= 2) modifier *= 0.5;
 
-    if (this.eroticIntentIndicators.some(r => r.test(content))) modifier *= 1.3;
-    if (this.roleplayIndicators.filter(r => r.test(content)).length >= 2) modifier *= 1.4;
+    if (this.eroticIntentIndicators.some((r) => r.test(content))) modifier *= 1.3;
+    if (this.roleplayIndicators.filter((r) => r.test(content)).length >= 2) modifier *= 1.4;
 
     if (context.ageVerified) modifier *= 0.8;
     if ((context as any).priorViolations > 0) modifier *= 1.2;
@@ -259,7 +267,7 @@ export class NSFWAdvancedGuardrail extends BaseGuardrail<NSFWGuardrailConfig> {
   private makeDecision(
     signals: NSFWDetectionSignal[],
     modifier: number,
-    context: GuardrailContext
+    context: GuardrailContext,
   ) {
     if (!signals.length) {
       return {
@@ -336,7 +344,7 @@ export class NSFWAdvancedGuardrail extends BaseGuardrail<NSFWGuardrailConfig> {
     decision: any,
     signals: NSFWDetectionSignal[],
     original: string,
-    context: GuardrailContext
+    context: GuardrailContext,
   ) {
     const severityMap = {
       [NSFWSeverityLevel.LEVEL_0_ALLOWED]: 'info',
@@ -355,13 +363,14 @@ export class NSFWAdvancedGuardrail extends BaseGuardrail<NSFWGuardrailConfig> {
         confidence: Number(decision.confidence.toFixed(3)),
         signalsDetected: signals.length,
         signals: signals.slice(0, 5),
-        telemetry: this.config.enableTelemetry !== false
-          ? {
-              contentLength: original.length,
-              timestamp: new Date().toISOString(),
-              version: '2.0.0',
-            }
-          : undefined,
+        telemetry:
+          this.config.enableTelemetry !== false
+            ? {
+                contentLength: original.length,
+                timestamp: new Date().toISOString(),
+                version: '2.0.0',
+              }
+            : undefined,
       },
     });
   }
@@ -376,55 +385,34 @@ export class NSFWAdvancedGuardrail extends BaseGuardrail<NSFWGuardrailConfig> {
         /\b(intercourse|penetration|oral\s+sex|fellatio|cunnilingus)\b/i,
         /\b(masturbat(e|ion|ing)|orgasm|ejaculat(e|ion))\b/i,
       ],
-      pornographic: [
-        /\b(porn|pornography|xxx|adult\s+content)\b/i,
-      ],
+      pornographic: [/\b(porn|pornography|xxx|adult\s+content)\b/i],
     };
 
     this.level2Contextual = {
-      sexual_themes: [
-        /\b(sexual|erotic|sensual|seductive|horny)\b/i,
-      ],
+      sexual_themes: [/\b(sexual|erotic|sensual|seductive|horny)\b/i],
     };
 
     this.level1Restricted = {
-      mature: [
-        /\b(kiss(ing)?|attraction|desire)\b/i,
-      ],
+      mature: [/\b(kiss(ing)?|attraction|desire)\b/i],
     };
 
     this.level0Medical = {
-      medical: [
-        /\b(medical|clinical|diagnosis|treatment)\b/i,
-      ],
-      educational: [
-        /\b(education|textbook|biology|anatomy)\b/i,
-      ],
+      medical: [/\b(medical|clinical|diagnosis|treatment)\b/i],
+      educational: [/\b(education|textbook|biology|anatomy)\b/i],
     };
   }
 
   private initContextPatterns() {
-    this.medicalIndicators = [
-      /\b(doctor|hospital|patient|therapy)\b/i,
-    ];
-    this.educationalIndicators = [
-      /\b(university|student|lecture|course)\b/i,
-    ];
-    this.eroticIntentIndicators = [
-      /\b(turned\s+on|fantasize|aroused)\b/i,
-    ];
+    this.medicalIndicators = [/\b(doctor|hospital|patient|therapy)\b/i];
+    this.educationalIndicators = [/\b(university|student|lecture|course)\b/i];
+    this.eroticIntentIndicators = [/\b(turned\s+on|fantasize|aroused)\b/i];
     this.roleplayIndicators = [/\b(roleplay|scenario|fictional)\b/i];
   }
 
   private initObfuscationPatterns() {
     this.obfuscationPatterns = {
-      separation: [
-        /\bp\s*[._-]?\s*o\s*[._-]?\s*r\s*[._-]?\s*n\b/i,
-      ],
-      misspellings: [
-        /\bp[o0]rn\b/i,
-        /\bs[e3]x\b/i,
-      ],
+      separation: [/\bp\s*[._-]?\s*o\s*[._-]?\s*r\s*[._-]?\s*n\b/i],
+      misspellings: [/\bp[o0]rn\b/i, /\bs[e3]x\b/i],
     };
   }
 }

@@ -43,13 +43,12 @@ class ThrowingGuardrail extends BaseGuardrail {
   }
 }
 
-
 describe('executeGuardrails', () => {
   it('executes guardrails sequentially', async () => {
     const result = await executeGuardrails(
       [new AllowGuardrail(), new AllowGuardrail()],
       'hello',
-      {} as GuardrailContext
+      {} as GuardrailContext,
     );
 
     expect(result.results.length).toBe(2);
@@ -62,7 +61,7 @@ describe('executeGuardrails', () => {
     const result = await executeGuardrails(
       [new AllowGuardrail(), new BlockGuardrail(), new AllowGuardrail()],
       'hello',
-      {}
+      {},
     );
 
     expect(result.results.length).toBe(2);
@@ -74,7 +73,7 @@ describe('executeGuardrails', () => {
     const result = await executeGuardrails(
       [new AllowGuardrail(), new ThrowingGuardrail(), new AllowGuardrail()],
       'hello',
-      {}
+      {},
     );
 
     expect(result.results.length).toBe(2);
@@ -88,7 +87,7 @@ describe('executeGuardrails', () => {
     const result = await executeGuardrails(
       [new AllowGuardrail(), new BlockGuardrail()],
       'hello',
-      {}
+      {},
     );
 
     expect(result.summary).toEqual({

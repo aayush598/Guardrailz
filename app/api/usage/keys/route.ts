@@ -8,35 +8,37 @@ async function getOrCreateUser(clerkUser: any) {
   const [user] = await db.select().from(users).where(eq(users.id, clerkUser.id));
   if (user) return user;
 
-  const [created] = await db.insert(users).values({
-    id: clerkUser.id,
-    email: clerkUser.emailAddresses[0]?.emailAddress ?? '',
-    firstName: clerkUser.firstName,
-    lastName: clerkUser.lastName,
-  }).returning();
+  const [created] = await db
+    .insert(users)
+    .values({
+      id: clerkUser.id,
+      email: clerkUser.emailAddresses[0]?.emailAddress ?? '',
+      firstName: clerkUser.firstName,
+      lastName: clerkUser.lastName,
+    })
+    .returning();
 
   return created;
 }
 
 function utcMinuteBucket(date: Date) {
-  return new Date(Date.UTC(
-    date.getUTCFullYear(),
-    date.getUTCMonth(),
-    date.getUTCDate(),
-    date.getUTCHours(),
-    date.getUTCMinutes(),
-    0,
-    0
-  ));
+  return new Date(
+    Date.UTC(
+      date.getUTCFullYear(),
+      date.getUTCMonth(),
+      date.getUTCDate(),
+      date.getUTCHours(),
+      date.getUTCMinutes(),
+      0,
+      0,
+    ),
+  );
 }
 
 function utcDayBucket(date: Date) {
-  return new Date(Date.UTC(
-    date.getUTCFullYear(),
-    date.getUTCMonth(),
-    date.getUTCDate(),
-    0, 0, 0, 0
-  ));
+  return new Date(
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0, 0),
+  );
 }
 
 export async function GET() {
@@ -61,8 +63,8 @@ export async function GET() {
     .where(
       and(
         eq(rateLimitTracking.userId, user.id),
-        eq(rateLimitTracking.windowStart, dayBucket) // covers day
-      )
+        eq(rateLimitTracking.windowStart, dayBucket), // covers day
+      ),
     );
 
   const usageDay: Record<string, number> = {};
@@ -84,8 +86,8 @@ export async function GET() {
       and(
         eq(rateLimitTracking.userId, user.id),
         eq(rateLimitTracking.windowType, 'minute'),
-        eq(rateLimitTracking.windowStart, minuteBucket)
-      )
+        eq(rateLimitTracking.windowStart, minuteBucket),
+      ),
     );
 
   for (const row of minuteRows) {

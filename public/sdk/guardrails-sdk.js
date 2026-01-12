@@ -40,7 +40,7 @@ class GuardrailsClient {
   async wrapLLMCall(llmFunction, inputText, inputProfileId = null, outputProfileId = null) {
     // Validate input first
     const inputValidation = await this.validateInput(inputText, inputProfileId);
-    
+
     if (!inputValidation.passed) {
       return {
         error: 'Input validation failed',

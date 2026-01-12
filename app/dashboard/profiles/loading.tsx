@@ -1,7 +1,7 @@
 export default function Loading() {
   return (
     <div className="min-h-screen bg-slate-50">
-      <div className="container mx-auto px-4 py-8 space-y-6">
+      <div className="container mx-auto space-y-6 px-4 py-8">
         <Skeleton className="h-10 w-64" />
 
         <div className="flex gap-3">
@@ -10,7 +10,7 @@ export default function Loading() {
           <Skeleton className="h-10 w-32" />
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
             <Skeleton key={i} className="h-64 rounded-xl" />
           ))}
@@ -23,7 +23,7 @@ export default function Loading() {
 function Skeleton({ className }: { className: string }) {
   return (
     <div
-      className={`bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 animate-pulse ${className}`}
+      className={`animate-pulse bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 ${className}`}
     />
   );
 }

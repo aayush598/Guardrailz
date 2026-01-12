@@ -9,12 +9,12 @@ describe('EncodingObfuscationGuardrail', () => {
     expect(res.passed).toBe(true);
   });
 
-//   it('detects base64 encoded content', () => {
-//     const g = new EncodingObfuscationGuardrail();
-//     const res = g.execute('cGFzc3dvcmQ=', {}); // password
-//     expect(res.action).toBe('BLOCK');
-//     expect(res.metadata?.signals).toContain('base64_decoded');
-//   });
+  //   it('detects base64 encoded content', () => {
+  //     const g = new EncodingObfuscationGuardrail();
+  //     const res = g.execute('cGFzc3dvcmQ=', {}); // password
+  //     expect(res.action).toBe('BLOCK');
+  //     expect(res.metadata?.signals).toContain('base64_decoded');
+  //   });
 
   it('detects leetspeak secrets', () => {
     const g = new EncodingObfuscationGuardrail();

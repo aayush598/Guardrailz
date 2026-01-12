@@ -7,11 +7,7 @@ import { BUILTIN_PROFILES } from '@/lib/profiles/built-in';
 
 // Helper to get or create user
 async function getOrCreateUser(clerkUser: any) {
-  const [existingUser] = await db
-    .select()
-    .from(users)
-    .where(eq(users.id, clerkUser.id))
-    .limit(1);
+  const [existingUser] = await db.select().from(users).where(eq(users.id, clerkUser.id)).limit(1);
 
   if (existingUser) {
     return existingUser;
@@ -59,7 +55,6 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-
     const dbUser = await getOrCreateUser(user);
     await initializeBuiltInProfiles(dbUser.id);
 
@@ -73,7 +68,7 @@ export async function GET() {
   } catch (error: any) {
     return NextResponse.json(
       { error: 'Failed to fetch profiles', details: error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -81,20 +76,16 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const user = await currentUser();
-if (!user) {
-  return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-}
-
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
     const dbUser = await getOrCreateUser(user);
     const body = await request.json();
     const { name, description, inputGuardrails, outputGuardrails, toolGuardrails } = body;
 
     if (!name) {
-      return NextResponse.json(
-        { error: 'Profile name is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Profile name is required' }, { status: 400 });
     }
 
     const [newProfile] = await db
@@ -114,7 +105,7 @@ if (!user) {
   } catch (error: any) {
     return NextResponse.json(
       { error: 'Failed to create profile', details: error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

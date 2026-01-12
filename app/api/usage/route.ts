@@ -8,11 +8,7 @@ import { eq, and, desc, gte, sql } from 'drizzle-orm';
 
 // Helper to get or create user
 async function getOrCreateUser(clerkUser: any) {
-  const [existingUser] = await db
-    .select()
-    .from(users)
-    .where(eq(users.id, clerkUser.id))
-    .limit(1);
+  const [existingUser] = await db.select().from(users).where(eq(users.id, clerkUser.id)).limit(1);
 
   if (existingUser) {
     return existingUser;
@@ -38,7 +34,6 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-
     const dbUser = await getOrCreateUser(user);
 
     // Get total executions
@@ -57,8 +52,8 @@ export async function GET() {
       .where(
         and(
           eq(guardrailExecutions.userId, dbUser.id),
-          gte(guardrailExecutions.createdAt, oneDayAgo)
-        )
+          gte(guardrailExecutions.createdAt, oneDayAgo),
+        ),
       );
 
     const last24Hours = Number(last24HoursResult[0]?.count || 0);
@@ -67,12 +62,7 @@ export async function GET() {
     const passedExecutionsResult = await db
       .select({ count: sql<number>`cast(count(*) as integer)` })
       .from(guardrailExecutions)
-      .where(
-        and(
-          eq(guardrailExecutions.userId, dbUser.id),
-          eq(guardrailExecutions.passed, true)
-        )
-      );
+      .where(and(eq(guardrailExecutions.userId, dbUser.id), eq(guardrailExecutions.passed, true)));
 
     const passedExecutions = Number(passedExecutionsResult[0]?.count || 0);
 
@@ -115,8 +105,8 @@ export async function GET() {
         and(
           eq(rateLimitTracking.userId, dbUser.id),
           eq(rateLimitTracking.windowType, 'minute'),
-          gte(rateLimitTracking.windowStart, minuteStart)
-        )
+          gte(rateLimitTracking.windowStart, minuteStart),
+        ),
       );
 
     const dayUsage = await db
@@ -126,8 +116,8 @@ export async function GET() {
         and(
           eq(rateLimitTracking.userId, dbUser.id),
           eq(rateLimitTracking.windowType, 'day'),
-          gte(rateLimitTracking.windowStart, dayStart)
-        )
+          gte(rateLimitTracking.windowStart, dayStart),
+        ),
       );
 
     const minuteCount = minuteUsage.reduce((sum, t) => sum + t.requestCount, 0);
@@ -154,7 +144,7 @@ export async function GET() {
     console.error('Usage error:', error);
     return NextResponse.json(
       { error: 'Failed to fetch usage', details: error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

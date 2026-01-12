@@ -8,7 +8,7 @@ import { normalizeGuardrailDescriptor } from './normalize';
 export async function runGuardrails(
   rawDescriptors: any[],
   text: string,
-  context: GuardrailContext
+  context: GuardrailContext,
 ) {
   const descriptors = rawDescriptors
     .map(normalizeGuardrailDescriptor)
@@ -20,9 +20,7 @@ export async function runGuardrails(
       return true;
     });
 
-  const instances = descriptors.map(d =>
-    guardrailRegistry.create(d.name, d.config)
-  );
+  const instances = descriptors.map((d) => guardrailRegistry.create(d.name, d.config));
 
   return executeGuardrails(instances, text, context);
 }

@@ -8,9 +8,7 @@ import {
   type AgentIdentity,
 } from '@/lib/guardrails/tool/tool-access.guardrail';
 
-export function createAgentIdentity(
-  overrides: Partial<AgentIdentity> = {}
-): AgentIdentity {
+export function createAgentIdentity(overrides: Partial<AgentIdentity> = {}): AgentIdentity {
   return {
     agentId: 'agent-1',
     agentType: PrincipalType.AGENT,
@@ -23,9 +21,7 @@ export function createAgentIdentity(
   };
 }
 
-export function createCapabilityToken(
-  overrides: Partial<CapabilityToken> = {}
-): CapabilityToken {
+export function createCapabilityToken(overrides: Partial<CapabilityToken> = {}): CapabilityToken {
   return {
     tokenId: 'token-1',
     agentId: 'agent-1',
@@ -38,9 +34,7 @@ export function createCapabilityToken(
   };
 }
 
-export function createToolAccessContext(
-  overrides: Partial<any> = {}
-) {
+export function createToolAccessContext(overrides: Partial<any> = {}) {
   return {
     toolName: 'db.write',
     toolArgs: { table: 'users' },

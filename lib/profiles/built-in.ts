@@ -8,22 +8,20 @@ export const BUILTIN_PROFILES = {
       { class: 'SecretsInInputGuardrail', config: { severity: 'critical' } },
       { class: 'InputSizeGuardrail', config: { maxChars: 50000 } },
       {
-      class: 'NSFWAdvancedGuardrail',
-      config: {
-        severityThreshold: 2,              // block explicit, warn contextual
-        enableContextAnalysis: true,
-        allowMedicalEducational: true,
-        enableObfuscationDetection: true,
-        minConfidence: 0.7,
+        class: 'NSFWAdvancedGuardrail',
+        config: {
+          severityThreshold: 2, // block explicit, warn contextual
+          enableContextAnalysis: true,
+          allowMedicalEducational: true,
+          enableObfuscationDetection: true,
+          minConfidence: 0.7,
+        },
       },
-    },
     ],
-    outputGuardrails: [
-      { class: 'OutputPIIRedactionGuardrail', config: {} },
-    ],
+    outputGuardrails: [{ class: 'OutputPIIRedactionGuardrail', config: {} }],
     toolGuardrails: [],
   },
-  
+
   enterprise_security: {
     name: 'enterprise_security',
     description: 'Enterprise-grade security with strict controls',
@@ -31,12 +29,10 @@ export const BUILTIN_PROFILES = {
       { class: 'SecretsInInputGuardrail', config: { severity: 'critical' } },
       { class: 'InputSizeGuardrail', config: { maxChars: 25000 } },
     ],
-    outputGuardrails: [
-      { class: 'OutputPIIRedactionGuardrail', config: {} },
-    ],
+    outputGuardrails: [{ class: 'OutputPIIRedactionGuardrail', config: {} }],
     toolGuardrails: [],
   },
-  
+
   child_safety: {
     name: 'child_safety',
     description: 'Maximum safety for children and educational contexts',
@@ -44,12 +40,10 @@ export const BUILTIN_PROFILES = {
       { class: 'SecretsInInputGuardrail', config: { severity: 'critical' } },
       { class: 'InputSizeGuardrail', config: { maxChars: 30000 } },
     ],
-    outputGuardrails: [
-      { class: 'OutputPIIRedactionGuardrail', config: {} },
-    ],
+    outputGuardrails: [{ class: 'OutputPIIRedactionGuardrail', config: {} }],
     toolGuardrails: [],
   },
-  
+
   healthcare: {
     name: 'healthcare',
     description: 'HIPAA-compliant guardrails for healthcare',
@@ -57,12 +51,10 @@ export const BUILTIN_PROFILES = {
       { class: 'SecretsInInputGuardrail', config: { severity: 'critical' } },
       { class: 'InputSizeGuardrail', config: { maxChars: 40000 } },
     ],
-    outputGuardrails: [
-      { class: 'OutputPIIRedactionGuardrail', config: {} },
-    ],
+    outputGuardrails: [{ class: 'OutputPIIRedactionGuardrail', config: {} }],
     toolGuardrails: [],
   },
-  
+
   financial: {
     name: 'financial',
     description: 'Financial services compliance guardrails',
@@ -70,18 +62,14 @@ export const BUILTIN_PROFILES = {
       { class: 'SecretsInInputGuardrail', config: { severity: 'critical' } },
       { class: 'InputSizeGuardrail', config: { maxChars: 35000 } },
     ],
-    outputGuardrails: [
-      { class: 'OutputPIIRedactionGuardrail', config: {} },
-    ],
+    outputGuardrails: [{ class: 'OutputPIIRedactionGuardrail', config: {} }],
     toolGuardrails: [],
   },
-  
+
   minimal: {
     name: 'minimal',
     description: 'Minimal guardrails for development/testing',
-    inputGuardrails: [
-      { class: 'InputSizeGuardrail', config: { maxChars: 100000 } },
-    ],
+    inputGuardrails: [{ class: 'InputSizeGuardrail', config: { maxChars: 100000 } }],
     outputGuardrails: [],
     toolGuardrails: [],
   },

@@ -11,4 +11,4 @@ export const HUB_TAGS = [
   'finance',
 ] as const;
 
-export type HubTag = typeof HUB_TAGS[number];
+export type HubTag = (typeof HUB_TAGS)[number];

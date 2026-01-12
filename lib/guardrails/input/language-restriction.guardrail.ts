@@ -1,9 +1,6 @@
 import { BaseGuardrail } from '../core/base';
 import { GuardrailContext } from '../core/context';
-import {
-  GuardrailAction,
-  GuardrailSeverity,
-} from '../core/types';
+import { GuardrailAction, GuardrailSeverity } from '../core/types';
 
 /* ============================================================================
  * Config
@@ -14,14 +11,7 @@ export interface LanguageRestrictionConfig {
    * Examples: latin, cyrillic, arabic, devanagari
    */
   allowedScripts?: Array<
-    | 'latin'
-    | 'cyrillic'
-    | 'arabic'
-    | 'devanagari'
-    | 'han'
-    | 'hiragana'
-    | 'katakana'
-    | 'hangul'
+    'latin' | 'cyrillic' | 'arabic' | 'devanagari' | 'han' | 'hiragana' | 'katakana' | 'hangul'
   >;
 
   /**
@@ -104,19 +94,19 @@ export class LanguageRestrictionGuardrail extends BaseGuardrail<LanguageRestrict
     const ratio = allowedCount / checkedCount;
 
     if (
-    ratio >= this.config.minAllowedRatio ||
-    disallowedCount <= this.config.maxDisallowedChars!
+      ratio >= this.config.minAllowedRatio ||
+      disallowedCount <= this.config.maxDisallowedChars!
     ) {
-    return this.result({
+      return this.result({
         passed: true,
         action: 'ALLOW',
         severity: 'info',
         message: 'Input language is allowed',
         metadata: {
-        allowedRatio: Number(ratio.toFixed(3)),
-        disallowedChars: disallowedCount,
+          allowedRatio: Number(ratio.toFixed(3)),
+          disallowedChars: disallowedCount,
         },
-    });
+      });
     }
 
     const action: GuardrailAction = this.config.warnOnly ? 'WARN' : 'BLOCK';

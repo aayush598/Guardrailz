@@ -35,26 +35,17 @@ export class BinaryAttachmentGuardrail extends BaseGuardrail<BinaryAttachmentGua
 
     // 1. Data URLs (highest confidence)
     if (!this.config.allowDataUrls && this.isDataUrl(trimmed)) {
-      return this.block(
-        'Data URL / embedded file detected',
-        'data_url'
-      );
+      return this.block('Data URL / embedded file detected', 'data_url');
     }
 
     // 2. Base64 blobs
     if (!this.config.allowBase64 && this.isBase64Payload(trimmed)) {
-      return this.block(
-        'Base64-encoded binary payload detected',
-        'base64'
-      );
+      return this.block('Base64-encoded binary payload detected', 'base64');
     }
 
     // 3. Binary / high-entropy text
     if (this.looksBinary(trimmed)) {
-      return this.block(
-        'Binary or encoded attachment detected',
-        'binary'
-      );
+      return this.block('Binary or encoded attachment detected', 'binary');
     }
 
     return this.result({
@@ -92,7 +83,7 @@ export class BinaryAttachmentGuardrail extends BaseGuardrail<BinaryAttachmentGua
       if (
         (c < 9 || c > 126) &&
         c !== 10 && // newline
-        c !== 13    // carriage return
+        c !== 13 // carriage return
       ) {
         nonPrintable++;
       }

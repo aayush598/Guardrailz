@@ -44,22 +44,18 @@ export async function GET(request: NextRequest) {
       .select()
       .from(guardrailExecutions)
       .where(
-        and(
-          eq(guardrailExecutions.userId, userId),
-          gte(guardrailExecutions.createdAt, startDate)
-        )
+        and(eq(guardrailExecutions.userId, userId), gte(guardrailExecutions.createdAt, startDate)),
       );
 
     // Calculate overview stats
     const totalExecutions = executions.length;
     const totalPassed = executions.filter((e) => e.passed).length;
     const totalFailed = executions.filter((e) => !e.passed).length;
-    const avgExecutionTime = totalExecutions > 0
-      ? Math.round(executions.reduce((sum, e) => sum + e.executionTimeMs, 0) / totalExecutions)
-      : 0;
-    const successRate = totalExecutions > 0 
-      ? (totalPassed / totalExecutions) * 100 
-      : 0;
+    const avgExecutionTime =
+      totalExecutions > 0
+        ? Math.round(executions.reduce((sum, e) => sum + e.executionTimeMs, 0) / totalExecutions)
+        : 0;
+    const successRate = totalExecutions > 0 ? (totalPassed / totalExecutions) * 100 : 0;
 
     // Calculate change from previous period (mock data for now)
     const changeFromLastPeriod = {
@@ -69,12 +65,15 @@ export async function GET(request: NextRequest) {
     };
 
     // Time series data (group by day)
-    const timeSeriesMap = new Map<string, {
-      executions: number;
-      passed: number;
-      failed: number;
-      totalTime: number;
-    }>();
+    const timeSeriesMap = new Map<
+      string,
+      {
+        executions: number;
+        passed: number;
+        failed: number;
+        totalTime: number;
+      }
+    >();
 
     executions.forEach((execution) => {
       const date = execution.createdAt.toISOString().split('T')[0];
@@ -104,11 +103,14 @@ export async function GET(request: NextRequest) {
       .sort((a, b) => a.date.localeCompare(b.date));
 
     // Guardrail statistics
-    const guardrailStatsMap = new Map<string, {
-      executions: number;
-      failures: number;
-      totalTime: number;
-    }>();
+    const guardrailStatsMap = new Map<
+      string,
+      {
+        executions: number;
+        failures: number;
+        totalTime: number;
+      }
+    >();
 
     executions.forEach((execution) => {
       const results = execution.guardrailResults as any[];
@@ -138,10 +140,13 @@ export async function GET(request: NextRequest) {
       .sort((a, b) => b.executions - a.executions);
 
     // Profile statistics
-    const profileStatsMap = new Map<string, {
-      executions: number;
-      passed: number;
-    }>();
+    const profileStatsMap = new Map<
+      string,
+      {
+        executions: number;
+        passed: number;
+      }
+    >();
 
     executions.forEach((execution) => {
       const current = profileStatsMap.get(execution.profileId) || {
@@ -160,7 +165,12 @@ export async function GET(request: NextRequest) {
     const profilesData = await db
       .select()
       .from(profiles)
-      .where(sql`${profiles.id} IN (${sql.join(profileIds.map(id => sql`${id}`), sql`, `)})`);
+      .where(
+        sql`${profiles.id} IN (${sql.join(
+          profileIds.map((id) => sql`${id}`),
+          sql`, `,
+        )})`,
+      );
 
     const profileStats = Array.from(profileStatsMap.entries())
       .map(([profileId, data]) => {
@@ -189,10 +199,13 @@ export async function GET(request: NextRequest) {
       .sort((a, b) => b.executions - a.executions);
 
     // Top errors
-    const errorMap = new Map<string, {
-      count: number;
-      lastOccurred: Date;
-    }>();
+    const errorMap = new Map<
+      string,
+      {
+        count: number;
+        lastOccurred: Date;
+      }
+    >();
 
     executions
       .filter((e) => !e.passed)
@@ -241,9 +254,6 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Analytics error:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch analytics' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to fetch analytics' }, { status: 500 });
   }
 }

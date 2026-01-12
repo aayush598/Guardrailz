@@ -19,11 +19,10 @@ describe('NSFWAdvancedGuardrail', () => {
   });
 
   it('allows contextual sexual content for age-verified users', () => {
-  const g = new NSFWAdvancedGuardrail();
-  const res = g.execute('sensual romantic scene', { ageVerified: true });
+    const g = new NSFWAdvancedGuardrail();
+    const res = g.execute('sensual romantic scene', { ageVerified: true });
 
-  expect(res.action).toBe('ALLOW');
-  expect(res.passed).toBe(true);
-});
-
+    expect(res.action).toBe('ALLOW');
+    expect(res.passed).toBe(true);
+  });
 });

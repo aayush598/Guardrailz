@@ -4,7 +4,7 @@ export default function HubLoading() {
       <div className="container mx-auto px-4 py-8">
         <div className="flex gap-8">
           {/* Sidebar skeleton */}
-          <aside className="hidden lg:block w-72">
+          <aside className="hidden w-72 lg:block">
             <Skeleton className="h-96 rounded-xl" />
           </aside>
 
@@ -12,7 +12,7 @@ export default function HubLoading() {
           <main className="flex-1 space-y-6">
             <Skeleton className="h-14 rounded-xl" />
 
-            <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {Array.from({ length: 6 }).map((_, i) => (
                 <Skeleton key={i} className="h-72 rounded-xl" />
               ))}
@@ -27,7 +27,7 @@ export default function HubLoading() {
 function Skeleton({ className }: { className: string }) {
   return (
     <div
-      className={`bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 animate-pulse ${className}`}
+      className={`animate-pulse bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 ${className}`}
     />
   );
 }

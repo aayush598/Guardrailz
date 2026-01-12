@@ -1,5 +1,5 @@
 import { GuardrailContext } from './context';
-import { GuardrailResult,GuardrailStage, GuardrailSeverity, GuardrailAction } from './types';
+import { GuardrailResult, GuardrailStage, GuardrailSeverity, GuardrailAction } from './types';
 
 export abstract class BaseGuardrail<Config = any> {
   readonly name: string;
@@ -14,12 +14,10 @@ export abstract class BaseGuardrail<Config = any> {
 
   abstract execute(
     text: string,
-    context: GuardrailContext
+    context: GuardrailContext,
   ): Promise<GuardrailResult> | GuardrailResult;
 
-  protected result(
-    partial: Omit<GuardrailResult, 'guardrailName'>
-  ): GuardrailResult {
+  protected result(partial: Omit<GuardrailResult, 'guardrailName'>): GuardrailResult {
     return {
       guardrailName: this.name,
       ...partial,

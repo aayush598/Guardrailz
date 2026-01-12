@@ -1,4 +1,4 @@
-import { GuardrailDescriptor } from "../guardrails/normalize";
+import { GuardrailDescriptor } from '../guardrails/normalize';
 
 export interface RuntimeProfile {
   id: string;

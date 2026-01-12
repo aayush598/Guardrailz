@@ -50,13 +50,10 @@ const getDashboardStatsCached = unstable_cache(
 
     /* Aggregate failed guardrails */
     const failedMap = new Map<string, number>();
-    failedExecutions.forEach(e => {
-      (e.guardrailResults as any[])?.forEach(r => {
+    failedExecutions.forEach((e) => {
+      (e.guardrailResults as any[])?.forEach((r) => {
         if (!r.passed) {
-          failedMap.set(
-            r.guardrailName,
-            (failedMap.get(r.guardrailName) || 0) + 1
-          );
+          failedMap.set(r.guardrailName, (failedMap.get(r.guardrailName) || 0) + 1);
         }
       });
     });
@@ -74,7 +71,7 @@ const getDashboardStatsCached = unstable_cache(
         perMinute: { current: 0, max: apiKey?.requestsPerMinute ?? 100 },
         perDay: { current: last24, max: apiKey?.requestsPerDay ?? 10_000 },
       },
-      recentActivity: recentActivity.map(a => ({
+      recentActivity: recentActivity.map((a) => ({
         timestamp: a.timestamp.toISOString(),
         profileName: a.profileName ?? 'Unknown',
         passed: a.passed,
@@ -87,7 +84,7 @@ const getDashboardStatsCached = unstable_cache(
     };
   },
   ['dashboard-stats'], // base key
-  { revalidate: 60 }
+  { revalidate: 60 },
 );
 
 /* ---------------- HELPERS ---------------- */
@@ -99,11 +96,8 @@ const countExec = async (userId: string, since?: Date) =>
       .from(guardrailExecutions)
       .where(
         since
-          ? and(
-              eq(guardrailExecutions.userId, userId),
-              gte(guardrailExecutions.createdAt, since)
-            )
-          : eq(guardrailExecutions.userId, userId)
+          ? and(eq(guardrailExecutions.userId, userId), gte(guardrailExecutions.createdAt, since))
+          : eq(guardrailExecutions.userId, userId),
       )
   )[0].c;
 
@@ -112,12 +106,7 @@ const countPassed = async (userId: string, passed: boolean) =>
     await db
       .select({ c: sql<number>`count(*)::int` })
       .from(guardrailExecutions)
-      .where(
-        and(
-          eq(guardrailExecutions.userId, userId),
-          eq(guardrailExecutions.passed, passed)
-        )
-      )
+      .where(and(eq(guardrailExecutions.userId, userId), eq(guardrailExecutions.passed, passed)))
   )[0].c;
 
 const avgExecTime = async (userId: string) =>
@@ -148,12 +137,7 @@ const failedExec = async (userId: string) =>
   db
     .select({ guardrailResults: guardrailExecutions.guardrailResults })
     .from(guardrailExecutions)
-    .where(
-      and(
-        eq(guardrailExecutions.userId, userId),
-        eq(guardrailExecutions.passed, false)
-      )
-    )
+    .where(and(eq(guardrailExecutions.userId, userId), eq(guardrailExecutions.passed, false)))
     .limit(50);
 
 const countApiKeys = async (userId: string) =>
@@ -161,9 +145,7 @@ const countApiKeys = async (userId: string) =>
     await db
       .select({ c: sql<number>`count(*)::int` })
       .from(apiKeys)
-      .where(
-        and(eq(apiKeys.userId, userId), eq(apiKeys.isActive, true))
-      )
+      .where(and(eq(apiKeys.userId, userId), eq(apiKeys.isActive, true)))
   )[0].c;
 
 const countProfiles = async (userId: string) =>
@@ -179,8 +161,6 @@ const firstApiKey = async (userId: string) =>
     await db
       .select()
       .from(apiKeys)
-      .where(
-        and(eq(apiKeys.userId, userId), eq(apiKeys.isActive, true))
-      )
+      .where(and(eq(apiKeys.userId, userId), eq(apiKeys.isActive, true)))
       .limit(1)
   )[0];

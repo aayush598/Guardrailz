@@ -26,10 +26,7 @@ export async function POST(req: NextRequest) {
 
     const rate = await checkRateLimit(key.id, key.userId);
     if (!rate.allowed) {
-      return NextResponse.json(
-        { error: rate.reason, limits: rate.limits },
-        { status: 429 }
-      );
+      return NextResponse.json({ error: rate.reason, limits: rate.limits }, { status: 429 });
     }
 
     const { text, profileName, validationType = 'input' } = await req.json();
@@ -41,12 +38,7 @@ export async function POST(req: NextRequest) {
     const [profile] = await db
       .select()
       .from(profiles)
-      .where(
-        and(
-          eq(profiles.name, profileName),
-          eq(profiles.userId, key.userId)
-        )
-      )
+      .where(and(eq(profiles.name, profileName), eq(profiles.userId, key.userId)))
       .limit(1);
 
     if (!profile) {
@@ -57,19 +49,15 @@ export async function POST(req: NextRequest) {
       validationType === 'input'
         ? profile.inputGuardrails
         : validationType === 'output'
-        ? profile.outputGuardrails
-        : [...profile.inputGuardrails, ...profile.outputGuardrails];
+          ? profile.outputGuardrails
+          : [...profile.inputGuardrails, ...profile.outputGuardrails];
 
-    const result = await runGuardrails(
-      guardrails,
-      text,
-      {
-        validationType,
-        userId: key.userId,
-        apiKeyId: key.id,
-        profileId: profile.id,
-      }
-    );
+    const result = await runGuardrails(guardrails, text, {
+      validationType,
+      userId: key.userId,
+      apiKeyId: key.id,
+      profileId: profile.id,
+    });
 
     await db.insert(guardrailExecutions).values({
       userId: key.userId,
@@ -94,9 +82,6 @@ export async function POST(req: NextRequest) {
     });
   } catch (err: any) {
     console.error(err);
-    return NextResponse.json(
-      { error: 'Validation failed', details: err.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Validation failed', details: err.message }, { status: 500 });
   }
 }

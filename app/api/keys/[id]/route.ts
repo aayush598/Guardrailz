@@ -6,11 +6,7 @@ import { eq, and } from 'drizzle-orm';
 
 // Helper to get or create user
 async function getOrCreateUser(clerkUser: any) {
-  const [existingUser] = await db
-    .select()
-    .from(users)
-    .where(eq(users.id, clerkUser.id))
-    .limit(1);
+  const [existingUser] = await db.select().from(users).where(eq(users.id, clerkUser.id)).limit(1);
 
   if (existingUser) {
     return existingUser;
@@ -29,10 +25,7 @@ async function getOrCreateUser(clerkUser: any) {
   return newUser;
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const user = await currentUser();
     if (!user) {
@@ -41,28 +34,18 @@ export async function DELETE(
 
     const dbUser = await getOrCreateUser(user);
 
-    await db
-      .delete(apiKeys)
-      .where(
-        and(
-          eq(apiKeys.id, params.id), 
-          eq(apiKeys.userId, dbUser.id)
-        )
-      );
+    await db.delete(apiKeys).where(and(eq(apiKeys.id, params.id), eq(apiKeys.userId, dbUser.id)));
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
     return NextResponse.json(
       { error: 'Failed to delete API key', details: error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
   const user = await currentUser();
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -78,12 +61,7 @@ export async function PATCH(
   await db
     .update(apiKeys)
     .set(update)
-    .where(
-      and(
-        eq(apiKeys.id, params.id),
-        eq(apiKeys.userId, dbUser.id)
-      )
-    );
+    .where(and(eq(apiKeys.id, params.id), eq(apiKeys.userId, dbUser.id)));
 
   return NextResponse.json({ success: true });
 }

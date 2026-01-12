@@ -6,8 +6,8 @@ import { GuardrailAction, GuardrailSeverity } from '../core/types';
 /* Config                                                                      */
 /* -------------------------------------------------------------------------- */
 export interface EncodingObfuscationConfig {
-  blockOnDecode?: boolean;      // default true
-  minEncodedLength?: number;    // default 16
+  blockOnDecode?: boolean; // default true
+  minEncodedLength?: number; // default 16
   confidenceThreshold?: number; // default 0.7
 }
 
@@ -135,13 +135,13 @@ export class EncodingObfuscationGuardrail extends BaseGuardrail<EncodingObfuscat
       '5': 's',
       '7': 't',
       '@': 'a',
-      '$': 's',
+      $: 's',
     };
 
     return text
       .toLowerCase()
       .split('')
-      .map(c => map[c] ?? c)
+      .map((c) => map[c] ?? c)
       .join('');
   }
 

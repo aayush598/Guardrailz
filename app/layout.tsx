@@ -2,7 +2,7 @@ import './globals.css';
 import { ClerkProvider } from '@clerk/nextjs';
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
 });
@@ -17,16 +17,11 @@ export const metadata = {
   description: 'Enterprise-grade guardrails for LLM applications with sub-100ms latency',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <ClerkProvider>
       <html lang="en" className={`${inter.variable} ${jakarta.variable}`}>
-        <body className={`${inter.className} antialiased`}>
-          {children}</body>
+        <body className={`${inter.className} antialiased`}>{children}</body>
       </html>
     </ClerkProvider>
   );

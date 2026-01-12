@@ -2,12 +2,7 @@
 module.exports = {
   root: true,
   extends: ['next/core-web-vitals'],
-  ignorePatterns: [
-    '.next/**',
-    'node_modules/**',
-    'dist/**',
-    'coverage/**',
-  ],
+  ignorePatterns: ['.next/**', 'node_modules/**', 'dist/**', 'coverage/**'],
   rules: {
     'no-unused-vars': 'warn',
     'no-console': 'warn',

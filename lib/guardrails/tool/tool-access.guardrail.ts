@@ -12,11 +12,7 @@
 import crypto from 'crypto';
 import { BaseGuardrail } from '../core/base';
 import { GuardrailContext } from '../core/context';
-import {
-  GuardrailResult,
-  GuardrailAction,
-  GuardrailSeverity,
-} from '../core/types';
+import { GuardrailResult, GuardrailAction, GuardrailSeverity } from '../core/types';
 
 /* ========================================================================== */
 /* 1. POLICY & TAXONOMY                                                        */
@@ -123,17 +119,11 @@ export interface CapabilityToken {
   signature?: string;
 }
 
-export function verifyCapabilityToken(
-  token: CapabilityToken,
-  signingKey: string
-): boolean {
+export function verifyCapabilityToken(token: CapabilityToken, signingKey: string): boolean {
   if (!token.signature) return false;
 
   const payload = `${token.tokenId}:${token.agentId}:${token.toolName}:${token.issuedAt.toISOString()}`;
-  const expected = crypto
-    .createHash('sha256')
-    .update(`${payload}:${signingKey}`)
-    .digest('hex');
+  const expected = crypto.createHash('sha256').update(`${payload}:${signingKey}`).digest('hex');
 
   return token.signature === expected;
 }
@@ -166,9 +156,7 @@ export interface ToolPolicy {
   maxInvocationsPerHour?: number;
   allowedEnvironments?: Set<string>;
   auditRequired?: boolean;
-  customValidators?: Array<
-    (args: Record<string, any>, ctx: RuntimeContext) => [boolean, string?]
-  >;
+  customValidators?: Array<(args: Record<string, any>, ctx: RuntimeContext) => [boolean, string?]>;
 }
 
 export class ToolAccessPolicy {
@@ -178,7 +166,7 @@ export class ToolAccessPolicy {
       toolName: string,
       identity: AgentIdentity,
       ctx: RuntimeContext,
-      args: Record<string, any>
+      args: Record<string, any>,
     ) => [PolicyDecision, string?]
   > = [];
 
@@ -195,7 +183,7 @@ export class ToolAccessPolicy {
     identity: AgentIdentity,
     token: CapabilityToken | undefined,
     ctx: RuntimeContext,
-    args: Record<string, any>
+    args: Record<string, any>,
   ): [PolicyDecision, string, Record<string, any>] {
     const policy = this.getPolicy(toolName);
     if (!policy) {
@@ -280,10 +268,7 @@ export class ToolAccessControlGuardrail extends BaseGuardrail {
   private policy: ToolAccessPolicy;
   private signingKey: string;
 
-  constructor(config: {
-    policy: ToolAccessPolicy;
-    signingKey: string;
-  }) {
+  constructor(config: { policy: ToolAccessPolicy; signingKey: string }) {
     super('ToolAccessControlGuardrail', 'tool', config);
     this.policy = config.policy;
     this.signingKey = config.signingKey;
@@ -291,16 +276,15 @@ export class ToolAccessControlGuardrail extends BaseGuardrail {
 
   execute(_: string, context: GuardrailContext): GuardrailResult {
     if (!context || !('toolAccess' in context)) {
-    return this.result({
-      passed: true,
-      action: 'ALLOW',
-      severity: 'info',
-      message: 'No tool invocation detected',
-    });
+      return this.result({
+        passed: true,
+        action: 'ALLOW',
+        severity: 'info',
+        message: 'No tool invocation detected',
+      });
     }
 
     const toolCtx = (context as any).toolAccess;
-
 
     // Not a tool call → pass silently
     if (!toolCtx) {
@@ -312,19 +296,10 @@ export class ToolAccessControlGuardrail extends BaseGuardrail {
       });
     }
 
-    const {
-      toolName,
-      toolArgs,
-      agentIdentity,
-      capabilityToken,
-      runtimeContext,
-    } = toolCtx;
+    const { toolName, toolArgs, agentIdentity, capabilityToken, runtimeContext } = toolCtx;
 
     // Verify token signature
-    if (
-      capabilityToken &&
-      !verifyCapabilityToken(capabilityToken, this.signingKey)
-    ) {
+    if (capabilityToken && !verifyCapabilityToken(capabilityToken, this.signingKey)) {
       return this.result({
         passed: false,
         action: 'BLOCK',
@@ -338,7 +313,7 @@ export class ToolAccessControlGuardrail extends BaseGuardrail {
       agentIdentity,
       capabilityToken,
       runtimeContext,
-      toolArgs
+      toolArgs,
     );
 
     return this.result({

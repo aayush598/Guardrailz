@@ -17,15 +17,9 @@ export class UrlFileBlockerGuardrail extends BaseGuardrail<UrlFileBlockerConfig>
     super('UrlFileBlocker', 'input', config);
 
     this.blockedExtensions = new Set(
-      (config.blockedExtensions ?? [
-        'env',
-        'pem',
-        'key',
-        'crt',
-        'sqlite',
-        'db',
-        'bak',
-      ]).map(e => e.toLowerCase())
+      (config.blockedExtensions ?? ['env', 'pem', 'key', 'crt', 'sqlite', 'db', 'bak']).map((e) =>
+        e.toLowerCase(),
+      ),
     );
 
     this.urlPatterns = [

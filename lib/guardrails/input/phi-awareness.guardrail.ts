@@ -49,8 +49,8 @@ export class PHIAwarenessGuardrail extends BaseGuardrail<PHIAwarenessConfig> {
       });
     }
 
-    const hasMedical = MEDICAL_TERMS.some(rx => rx.test(text));
-    const hasIdentifier = IDENTIFIERS.some(rx => rx.test(text));
+    const hasMedical = MEDICAL_TERMS.some((rx) => rx.test(text));
+    const hasIdentifier = IDENTIFIERS.some((rx) => rx.test(text));
 
     // Medical but no identifiers → allowed
     if (hasMedical && !hasIdentifier && this.config.allowDeidentified) {
@@ -65,11 +65,9 @@ export class PHIAwarenessGuardrail extends BaseGuardrail<PHIAwarenessConfig> {
 
     // True PHI case
     if (hasMedical && hasIdentifier) {
-      const action: GuardrailAction =
-        this.config.mode === 'block' ? 'BLOCK' : 'WARN';
+      const action: GuardrailAction = this.config.mode === 'block' ? 'BLOCK' : 'WARN';
 
-      const severity: GuardrailSeverity =
-        action === 'BLOCK' ? 'error' : 'warning';
+      const severity: GuardrailSeverity = action === 'BLOCK' ? 'error' : 'warning';
 
       return this.result({
         passed: action !== 'BLOCK',

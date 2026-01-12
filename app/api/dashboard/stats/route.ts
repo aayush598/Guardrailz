@@ -37,8 +37,8 @@ export async function GET() {
       .where(
         and(
           eq(guardrailExecutions.userId, userId),
-          gte(guardrailExecutions.createdAt, last24Hours)
-        )
+          gte(guardrailExecutions.createdAt, last24Hours),
+        ),
       );
 
     const last24HoursCount = last24HoursResult[0]?.count || 0;
@@ -48,10 +48,7 @@ export async function GET() {
       .select({ count: sql<number>`cast(count(*) as int)` })
       .from(guardrailExecutions)
       .where(
-        and(
-          eq(guardrailExecutions.userId, userId),
-          gte(guardrailExecutions.createdAt, last7Days)
-        )
+        and(eq(guardrailExecutions.userId, userId), gte(guardrailExecutions.createdAt, last7Days)),
       );
 
     const last7DaysCount = last7DaysResult[0]?.count || 0;
@@ -60,31 +57,21 @@ export async function GET() {
     const passedResult = await db
       .select({ count: sql<number>`cast(count(*) as int)` })
       .from(guardrailExecutions)
-      .where(
-        and(
-          eq(guardrailExecutions.userId, userId),
-          eq(guardrailExecutions.passed, true)
-        )
-      );
+      .where(and(eq(guardrailExecutions.userId, userId), eq(guardrailExecutions.passed, true)));
 
     const passedExecutions = passedResult[0]?.count || 0;
 
     const failedResult = await db
       .select({ count: sql<number>`cast(count(*) as int)` })
       .from(guardrailExecutions)
-      .where(
-        and(
-          eq(guardrailExecutions.userId, userId),
-          eq(guardrailExecutions.passed, false)
-        )
-      );
+      .where(and(eq(guardrailExecutions.userId, userId), eq(guardrailExecutions.passed, false)));
 
     const failedExecutions = failedResult[0]?.count || 0;
 
     // Average execution time
     const avgTimeResult = await db
-      .select({ 
-        avgTime: sql<number>`cast(avg(${guardrailExecutions.executionTimeMs}) as int)` 
+      .select({
+        avgTime: sql<number>`cast(avg(${guardrailExecutions.executionTimeMs}) as int)`,
       })
       .from(guardrailExecutions)
       .where(eq(guardrailExecutions.userId, userId));
@@ -119,7 +106,7 @@ export async function GET() {
           passed: activity.passed,
           executionTime: activity.executionTime,
         };
-      })
+      }),
     );
 
     // Top failed guardrails (from execution results JSON)
@@ -128,17 +115,12 @@ export async function GET() {
         results: guardrailExecutions.guardrailResults,
       })
       .from(guardrailExecutions)
-      .where(
-        and(
-          eq(guardrailExecutions.userId, userId),
-          eq(guardrailExecutions.passed, false)
-        )
-      )
+      .where(and(eq(guardrailExecutions.userId, userId), eq(guardrailExecutions.passed, false)))
       .limit(100);
 
     // Aggregate failed guardrails
     const failedGuardrailsMap = new Map<string, number>();
-    
+
     failedExecutionsData.forEach((execution) => {
       const results = execution.results as any[];
       results?.forEach((result: any) => {
@@ -158,12 +140,7 @@ export async function GET() {
     const apiKeysResult = await db
       .select({ count: sql<number>`cast(count(*) as int)` })
       .from(apiKeys)
-      .where(
-        and(
-          eq(apiKeys.userId, userId),
-          eq(apiKeys.isActive, true)
-        )
-      );
+      .where(and(eq(apiKeys.userId, userId), eq(apiKeys.isActive, true)));
 
     const apiKeysCount = apiKeysResult[0]?.count || 0;
 
@@ -179,12 +156,7 @@ export async function GET() {
     const userApiKeys = await db
       .select()
       .from(apiKeys)
-      .where(
-        and(
-          eq(apiKeys.userId, userId),
-          eq(apiKeys.isActive, true)
-        )
-      )
+      .where(and(eq(apiKeys.userId, userId), eq(apiKeys.isActive, true)))
       .limit(1);
 
     const rateLimits = {
@@ -213,9 +185,6 @@ export async function GET() {
     });
   } catch (error) {
     console.error('Dashboard stats error:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch dashboard statistics' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to fetch dashboard statistics' }, { status: 500 });
   }
 }

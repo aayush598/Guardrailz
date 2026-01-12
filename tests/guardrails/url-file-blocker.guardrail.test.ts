@@ -18,8 +18,7 @@ describe('UrlFileBlockerGuardrail', () => {
 
     const metadata = res.metadata as { matches: string[]; totalMatches: number };
     expect(metadata.matches.length).toBeGreaterThan(0);
-    });
-
+  });
 
   it('blocks www URLs', () => {
     const g = new UrlFileBlockerGuardrail();

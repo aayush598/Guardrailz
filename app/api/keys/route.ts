@@ -7,11 +7,7 @@ import { generateApiKey } from '@/lib/utils/api-key';
 
 // Helper to get or create user
 async function getOrCreateUser(clerkUser: any) {
-  const [existingUser] = await db
-    .select()
-    .from(users)
-    .where(eq(users.id, clerkUser.id))
-    .limit(1);
+  const [existingUser] = await db.select().from(users).where(eq(users.id, clerkUser.id)).limit(1);
 
   if (existingUser) {
     return existingUser;
@@ -37,22 +33,19 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-
     const dbUser = await getOrCreateUser(user);
 
     const allKeys = await db
       .select()
       .from(apiKeys)
-      .where(
-        eq(apiKeys.userId, dbUser.id)
-      )
+      .where(eq(apiKeys.userId, dbUser.id))
       .orderBy(desc(apiKeys.createdAt));
 
     return NextResponse.json({ apiKeys: allKeys });
   } catch (error: any) {
     return NextResponse.json(
       { error: 'Failed to fetch API keys', details: error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -64,16 +57,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-
     const dbUser = await getOrCreateUser(user);
     const body = await request.json();
     const { name, requestsPerMinute = 100, requestsPerDay = 10000 } = body;
 
     if (!name) {
-      return NextResponse.json(
-        { error: 'API key name is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'API key name is required' }, { status: 400 });
     }
 
     const key = generateApiKey();
@@ -94,7 +83,7 @@ export async function POST(request: NextRequest) {
   } catch (error: any) {
     return NextResponse.json(
       { error: 'Failed to create API key', details: error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 import {
   Shield,
   Home,
@@ -12,16 +12,12 @@ import {
   Menu,
   X,
   ChevronRight,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
 
@@ -32,31 +28,18 @@ export default function DashboardLayout({
     return pathname.startsWith(href);
   };
 
-
-  const NavLink = ({
-    href,
-    icon: Icon,
-    label,
-  }: {
-    href: string;
-    icon: any;
-    label: string;
-  }) => {
+  const NavLink = ({ href, icon: Icon, label }: { href: string; icon: any; label: string }) => {
     const active = isActiveRoute(href);
 
     return (
       <Link
         href={href}
         prefetch
-        className={`
-          group relative flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium
-          transition-all duration-200
-          ${
-            active
-              ? 'bg-slate-700 text-white shadow-lg shadow-slate-900/20'
-              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-          }
-        `}
+        className={`group relative flex items-center space-x-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
+          active
+            ? 'bg-slate-700 text-white shadow-lg shadow-slate-900/20'
+            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+        } `}
         onClick={() => setSidebarOpen(false)}
       >
         <Icon
@@ -74,38 +57,30 @@ export default function DashboardLayout({
     );
   };
 
-
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="flex min-h-screen bg-slate-50">
       {/* Sidebar */}
       <aside
-        className={`
-          fixed lg:sticky top-0 left-0 z-40 h-screen w-72 
-          bg-white border-r border-slate-200
-          transition-transform duration-300 ease-in-out
-          lg:transition-none
-          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
-          shadow-xl lg:shadow-none lg:translate-x-0
-        `}
+        className={`fixed left-0 top-0 z-40 h-screen w-72 border-r border-slate-200 bg-white transition-transform duration-300 ease-in-out lg:sticky lg:transition-none ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} shadow-xl lg:translate-x-0 lg:shadow-none`}
       >
-        <div className="flex flex-col h-full">
+        <div className="flex h-full flex-col">
           {/* Logo Header */}
-          <div className="flex items-center justify-between p-6 border-b border-slate-200">
-            <div className="flex items-center space-x-3 group cursor-pointer">
+          <div className="flex items-center justify-between border-b border-slate-200 p-6">
+            <div className="group flex cursor-pointer items-center space-x-3">
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-slate-900 to-slate-700 rounded-xl blur-md opacity-40 group-hover:opacity-60 transition-opacity" />
-                <div className="relative bg-gradient-to-br from-slate-900 to-slate-700 p-2 rounded-xl shadow-lg">
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-slate-900 to-slate-700 opacity-40 blur-md transition-opacity group-hover:opacity-60" />
+                <div className="relative rounded-xl bg-gradient-to-br from-slate-900 to-slate-700 p-2 shadow-lg">
                   <Shield className="h-6 w-6 text-white" />
                 </div>
               </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-xl font-bold text-transparent">
                 Guardrailz
               </span>
             </div>
             <Button
               variant="ghost"
               size="sm"
-              className="lg:hidden hover:bg-slate-100"
+              className="hover:bg-slate-100 lg:hidden"
               onClick={() => setSidebarOpen(false)}
             >
               <X className="h-5 w-5" />
@@ -113,16 +88,16 @@ export default function DashboardLayout({
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto">
+          <nav className="flex-1 space-y-1.5 overflow-y-auto p-4">
             <div className="mb-4">
-              <p className="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+              <p className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
                 Main
               </p>
               <NavLink href="/dashboard" icon={Home} label="Overview" />
             </div>
 
             <div className="mb-4">
-              <p className="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+              <p className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
                 Management
               </p>
               <NavLink href="/dashboard/api-keys" icon={Key} label="API Keys" />
@@ -130,26 +105,29 @@ export default function DashboardLayout({
             </div>
 
             <div className="mb-4">
-              <p className="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+              <p className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
                 Tools
               </p>
               <NavLink href="/dashboard/playground" icon={Activity} label="Playground" />
               <NavLink href="/dashboard/analytics" icon={BarChart3} label="Analytics" />
             </div>
 
-            <div className="pt-4 border-t border-slate-200">
+            <div className="border-t border-slate-200 pt-4">
               <NavLink href="/dashboard/settings" icon={Settings} label="Settings" />
             </div>
           </nav>
 
           {/* Footer - Upgrade Card */}
-          <div className="p-4 border-t border-slate-200">
-            <div className="bg-gradient-to-br from-slate-700 to-slate-600 rounded-xl p-4 text-white relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-10 -mt-10" />
+          <div className="border-t border-slate-200 p-4">
+            <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-slate-700 to-slate-600 p-4 text-white">
+              <div className="absolute right-0 top-0 -mr-10 -mt-10 h-20 w-20 rounded-full bg-white/10" />
               <div className="relative">
-                <p className="text-xs font-semibold mb-1 text-slate-300">Free Plan</p>
-                <p className="text-sm font-bold mb-3">Upgrade to Pro</p>
-                <Button size="sm" className="w-full bg-white text-slate-900 hover:bg-slate-100 font-semibold shadow-lg">
+                <p className="mb-1 text-xs font-semibold text-slate-300">Free Plan</p>
+                <p className="mb-3 text-sm font-bold">Upgrade to Pro</p>
+                <Button
+                  size="sm"
+                  className="w-full bg-white font-semibold text-slate-900 shadow-lg hover:bg-slate-100"
+                >
                   Upgrade Now
                 </Button>
               </div>
@@ -161,15 +139,15 @@ export default function DashboardLayout({
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-30 lg:hidden"
+          className="fixed inset-0 z-30 bg-slate-900/50 backdrop-blur-sm lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col min-h-screen">
+      <main className="flex min-h-screen flex-1 flex-col">
         {/* Mobile Header */}
-        <div className="lg:hidden sticky top-0 z-20 bg-white/95 backdrop-blur-xl border-b border-slate-200 px-4 py-3">
+        <div className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 px-4 py-3 backdrop-blur-xl lg:hidden">
           <div className="flex items-center justify-between">
             <Button
               variant="ghost"
@@ -188,9 +166,7 @@ export default function DashboardLayout({
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 bg-slate-50">
-          {children}
-        </div>
+        <div className="flex-1 bg-slate-50">{children}</div>
       </main>
     </div>
   );

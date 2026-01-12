@@ -3,9 +3,7 @@ export interface GuardrailDescriptor {
   config?: Record<string, any>;
 }
 
-export function normalizeGuardrailDescriptor(
-  raw: any
-): GuardrailDescriptor | null {
+export function normalizeGuardrailDescriptor(raw: any): GuardrailDescriptor | null {
   if (!raw) return null;
 
   // Already canonical

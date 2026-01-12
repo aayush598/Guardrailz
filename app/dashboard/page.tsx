@@ -30,22 +30,18 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <div className="container mx-auto px-4 sm:px-6 py-8">
+      <div className="container mx-auto px-4 py-8 sm:px-6">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-2">
-            <h1 className="text-3xl sm:text-4xl font-bold text-slate-900">
-              Dashboard Overview
-            </h1>
+          <div className="mb-2 flex items-center justify-between">
+            <h1 className="text-3xl font-bold text-slate-900 sm:text-4xl">Dashboard Overview</h1>
             <UserButton afterSignOutUrl="/" />
           </div>
-          <p className="text-slate-600">
-            Monitor guardrail performance and usage in real-time
-          </p>
+          <p className="text-slate-600">Monitor guardrail performance and usage in real-time</p>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard
             title="Total Executions"
             value={stats.totalExecutions.toLocaleString()}
@@ -81,12 +77,12 @@ export default async function DashboardPage() {
         </div>
 
         {/* Rate Limits + Quick Actions */}
-        <div className="grid lg:grid-cols-3 gap-6 mb-8">
+        <div className="mb-8 grid gap-6 lg:grid-cols-3">
           {/* Rate Limits Card */}
-          <Card className="lg:col-span-2 border-slate-200 bg-white shadow-sm hover:shadow-md transition-shadow">
+          <Card className="border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md lg:col-span-2">
             <CardHeader className="border-b border-slate-100">
               <CardTitle className="flex items-center space-x-2 text-slate-900">
-                <div className="bg-slate-100 p-2 rounded-lg">
+                <div className="rounded-lg bg-slate-100 p-2">
                   <BarChart3 className="h-5 w-5 text-slate-700" />
                 </div>
                 <span>Rate Limits</span>
@@ -110,7 +106,7 @@ export default async function DashboardPage() {
           </Card>
 
           {/* Quick Actions Card */}
-          <Card className="border-slate-200 bg-white shadow-sm hover:shadow-md transition-shadow">
+          <Card className="border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
             <CardHeader className="border-b border-slate-100">
               <CardTitle className="text-slate-900">Quick Actions</CardTitle>
               <CardDescription>Manage your resources</CardDescription>
@@ -141,12 +137,12 @@ export default async function DashboardPage() {
         </div>
 
         {/* Activity + Failures */}
-        <div className="grid lg:grid-cols-2 gap-6">
+        <div className="grid gap-6 lg:grid-cols-2">
           {/* Recent Activity */}
-          <Card className="border-slate-200 bg-white shadow-sm hover:shadow-md transition-shadow">
+          <Card className="border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
             <CardHeader className="border-b border-slate-100">
               <CardTitle className="flex items-center space-x-2 text-slate-900">
-                <div className="bg-slate-100 p-2 rounded-lg">
+                <div className="rounded-lg bg-slate-100 p-2">
                   <Clock className="h-5 w-5 text-slate-700" />
                 </div>
                 <span>Recent Activity</span>
@@ -155,33 +151,29 @@ export default async function DashboardPage() {
             </CardHeader>
             <CardContent className="space-y-3 pt-6">
               {stats.recentActivity.length === 0 ? (
-                <div className="text-center py-8 text-slate-500">
-                  <Activity className="h-12 w-12 mx-auto mb-3 opacity-20" />
+                <div className="py-8 text-center text-slate-500">
+                  <Activity className="mx-auto mb-3 h-12 w-12 opacity-20" />
                   <p className="text-sm">No recent activity</p>
                 </div>
               ) : (
                 stats.recentActivity.map((a, i) => (
                   <div
                     key={i}
-                    className="flex items-center justify-between p-4 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors border border-slate-200"
+                    className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 p-4 transition-colors hover:bg-slate-100"
                   >
                     <div className="flex items-center space-x-3">
                       {a.passed ? (
-                        <div className="bg-green-100 p-2 rounded-lg">
+                        <div className="rounded-lg bg-green-100 p-2">
                           <CheckCircle2 className="h-4 w-4 text-green-600" />
                         </div>
                       ) : (
-                        <div className="bg-red-100 p-2 rounded-lg">
+                        <div className="rounded-lg bg-red-100 p-2">
                           <XCircle className="h-4 w-4 text-red-600" />
                         </div>
                       )}
                       <div>
-                        <span className="font-medium text-slate-900 text-sm">
-                          {a.profileName}
-                        </span>
-                        <p className="text-xs text-slate-500">
-                          {a.passed ? 'Passed' : 'Failed'}
-                        </p>
+                        <span className="text-sm font-medium text-slate-900">{a.profileName}</span>
+                        <p className="text-xs text-slate-500">{a.passed ? 'Passed' : 'Failed'}</p>
                       </div>
                     </div>
                     <div className="text-right">
@@ -196,10 +188,10 @@ export default async function DashboardPage() {
           </Card>
 
           {/* Top Failed Guardrails */}
-          <Card className="border-slate-200 bg-white shadow-sm hover:shadow-md transition-shadow">
+          <Card className="border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
             <CardHeader className="border-b border-slate-100">
               <CardTitle className="flex items-center space-x-2 text-slate-900">
-                <div className="bg-red-100 p-2 rounded-lg">
+                <div className="rounded-lg bg-red-100 p-2">
                   <AlertTriangle className="h-5 w-5 text-red-600" />
                 </div>
                 <span>Top Failed Guardrails</span>
@@ -208,23 +200,18 @@ export default async function DashboardPage() {
             </CardHeader>
             <CardContent className="space-y-3 pt-6">
               {stats.topFailedGuardrails.length === 0 ? (
-                <div className="text-center py-8 text-slate-500">
-                  <CheckCircle2 className="h-12 w-12 mx-auto mb-3 opacity-20 text-green-500" />
+                <div className="py-8 text-center text-slate-500">
+                  <CheckCircle2 className="mx-auto mb-3 h-12 w-12 text-green-500 opacity-20" />
                   <p className="text-sm">No failures detected</p>
                 </div>
               ) : (
                 stats.topFailedGuardrails.map((g, i) => (
                   <div
                     key={i}
-                    className="flex items-center justify-between p-4 bg-red-50 rounded-xl border border-red-200 hover:bg-red-100 transition-colors"
+                    className="flex items-center justify-between rounded-xl border border-red-200 bg-red-50 p-4 transition-colors hover:bg-red-100"
                   >
-                    <span className="font-medium text-slate-900 text-sm">
-                      {g.name}
-                    </span>
-                    <Badge
-                      variant="destructive"
-                      className="font-semibold bg-red-600"
-                    >
+                    <span className="text-sm font-medium text-slate-900">{g.name}</span>
+                    <Badge variant="destructive" className="bg-red-600 font-semibold">
                       {g.count} failures
                     </Badge>
                   </div>
@@ -240,10 +227,10 @@ export default async function DashboardPage() {
 
 function StatCard({ title, value, icon, gradient, iconBg, iconColor }: any) {
   return (
-    <Card className="border-slate-200 bg-white hover:shadow-lg transition-all duration-300 group">
+    <Card className="group border-slate-200 bg-white transition-all duration-300 hover:shadow-lg">
       <CardContent className="pt-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className={`${iconBg} p-3 rounded-xl group-hover:scale-110 transition-transform`}>
+        <div className="mb-4 flex items-center justify-between">
+          <div className={`${iconBg} rounded-xl p-3 transition-transform group-hover:scale-110`}>
             <div className={iconColor}>{icon}</div>
           </div>
         </div>
@@ -262,13 +249,13 @@ function ProgressBar({ label, current, max, color = 'slate' }: any) {
 
   return (
     <div>
-      <div className="flex justify-between text-sm mb-2">
+      <div className="mb-2 flex justify-between text-sm">
         <span className="font-medium text-slate-700">{label}</span>
-        <span className="text-slate-600 font-mono">
+        <span className="font-mono text-slate-600">
           {current.toLocaleString()} / {max.toLocaleString()}
         </span>
       </div>
-      <div className="h-3 rounded-full bg-slate-100 overflow-hidden">
+      <div className="h-3 overflow-hidden rounded-full bg-slate-100">
         <div
           className={`h-3 rounded-full transition-all duration-500 ${
             isNearLimit
@@ -279,9 +266,7 @@ function ProgressBar({ label, current, max, color = 'slate' }: any) {
         />
       </div>
       {isNearLimit && (
-        <p className="text-xs text-red-600 mt-1 font-medium">
-          ⚠️ Approaching rate limit
-        </p>
+        <p className="mt-1 text-xs font-medium text-red-600">⚠️ Approaching rate limit</p>
       )}
     </div>
   );
@@ -291,7 +276,7 @@ function QuickLink({ href, label, icon }: any) {
   return (
     <Button
       asChild
-      className="w-full justify-between text-sm font-medium hover:bg-slate-100 group"
+      className="group w-full justify-between text-sm font-medium hover:bg-slate-100"
       variant="ghost"
     >
       <Link href={href}>
@@ -299,7 +284,7 @@ function QuickLink({ href, label, icon }: any) {
           {icon}
           {label}
         </span>
-        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
       </Link>
     </Button>
   );

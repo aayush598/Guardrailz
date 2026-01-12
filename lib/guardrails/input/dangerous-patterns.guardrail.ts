@@ -1,9 +1,6 @@
 import { BaseGuardrail } from '../core/base';
 import { GuardrailContext } from '../core/context';
-import {
-  GuardrailAction,
-  GuardrailSeverity,
-} from '../core/types';
+import { GuardrailAction, GuardrailSeverity } from '../core/types';
 
 export interface DangerousPatternsConfig {
   /**
@@ -18,12 +15,7 @@ export interface DangerousPatternsConfig {
   customPatterns?: RegExp[];
 }
 
-type PatternCategory =
-  | 'malware'
-  | 'exploit'
-  | 'command_injection'
-  | 'fraud'
-  | 'weaponization';
+type PatternCategory = 'malware' | 'exploit' | 'command_injection' | 'fraud' | 'weaponization';
 
 interface DangerousMatch {
   category: PatternCategory;
@@ -32,10 +24,7 @@ interface DangerousMatch {
 
 export class DangerousPatternsGuardrail extends BaseGuardrail<DangerousPatternsConfig> {
   private readonly patterns: Record<PatternCategory, RegExp[]> = {
-    malware: [
-      /\b(ransomware|keylogger|trojan|spyware|backdoor)\b/i,
-      /\b(botnet|ddos\s+attack)\b/i,
-    ],
+    malware: [/\b(ransomware|keylogger|trojan|spyware|backdoor)\b/i, /\b(botnet|ddos\s+attack)\b/i],
     exploit: [
       /\b(sql\s*injection|xss\s*payload|buffer\s*overflow)\b/i,
       /\b(remote\s+code\s+execution|privilege\s+escalation)\b/i,
@@ -86,17 +75,13 @@ export class DangerousPatternsGuardrail extends BaseGuardrail<DangerousPatternsC
       });
     }
 
-    const highRisk = matches.some(m =>
-      ['malware', 'weaponization', 'command_injection'].includes(m.category)
+    const highRisk = matches.some((m) =>
+      ['malware', 'weaponization', 'command_injection'].includes(m.category),
     );
 
-    const action: GuardrailAction =
-      highRisk || this.config.strictMode
-        ? 'BLOCK'
-        : 'WARN';
+    const action: GuardrailAction = highRisk || this.config.strictMode ? 'BLOCK' : 'WARN';
 
-    const severity: GuardrailSeverity =
-      action === 'BLOCK' ? 'critical' : 'warning';
+    const severity: GuardrailSeverity = action === 'BLOCK' ? 'critical' : 'warning';
 
     return this.result({
       passed: action !== 'BLOCK',
@@ -104,7 +89,7 @@ export class DangerousPatternsGuardrail extends BaseGuardrail<DangerousPatternsC
       severity,
       message: 'Dangerous or malicious intent detected',
       metadata: {
-        categories: [...new Set(matches.map(m => m.category))],
+        categories: [...new Set(matches.map((m) => m.category))],
         matches: matches.slice(0, 5),
       },
     });

@@ -5,11 +5,7 @@ import { rateLimitTracking, guardrailExecutions } from '@/lib/db/schema';
 import { and, eq, gte, sql } from 'drizzle-orm';
 import ApiKeyAnalyticsClient from './ApiKeyAnalyticsClient';
 
-export default async function ApiKeyAnalyticsPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function ApiKeyAnalyticsPage({ params }: { params: { id: string } }) {
   const clerkUser = await currentUser();
   if (!clerkUser) throw new Error('Unauthorized');
 
@@ -31,8 +27,8 @@ export default async function ApiKeyAnalyticsPage({
       and(
         eq(rateLimitTracking.apiKeyId, apiKeyId),
         eq(rateLimitTracking.windowType, 'minute'),
-        gte(rateLimitTracking.windowStart, oneHourAgo)
-      )
+        gte(rateLimitTracking.windowStart, oneHourAgo),
+      ),
     )
     .orderBy(rateLimitTracking.windowStart);
 
@@ -47,8 +43,8 @@ export default async function ApiKeyAnalyticsPage({
       and(
         eq(rateLimitTracking.apiKeyId, apiKeyId),
         eq(rateLimitTracking.windowType, 'minute'),
-        gte(rateLimitTracking.windowStart, oneDayAgo)
-      )
+        gte(rateLimitTracking.windowStart, oneDayAgo),
+      ),
     )
     .groupBy(sql`1`)
     .orderBy(sql`1`);
@@ -64,8 +60,8 @@ export default async function ApiKeyAnalyticsPage({
       and(
         eq(rateLimitTracking.apiKeyId, apiKeyId),
         eq(rateLimitTracking.windowType, 'day'),
-        gte(rateLimitTracking.windowStart, sevenDaysAgo)
-      )
+        gte(rateLimitTracking.windowStart, sevenDaysAgo),
+      ),
     )
     .orderBy(rateLimitTracking.windowStart);
 
@@ -79,8 +75,8 @@ export default async function ApiKeyAnalyticsPage({
     .where(
       and(
         eq(guardrailExecutions.apiKeyId, apiKeyId),
-        gte(guardrailExecutions.createdAt, oneDayAgo)
-      )
+        gte(guardrailExecutions.createdAt, oneDayAgo),
+      ),
     )
     .groupBy(guardrailExecutions.passed);
 

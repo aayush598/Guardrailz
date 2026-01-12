@@ -114,7 +114,7 @@ curl -X POST https://your-app-url.com/api/validate \
       "severity": "warning",
       "message": "Redacted 1 PII instance(s) from output",
       "details": {
-        "redactions": [{"type": "Email", "count": 1}],
+        "redactions": [{ "type": "Email", "count": 1 }],
         "totalRedactions": 1
       },
       "redactedText": "My email is [EMAIL_REDACTED]"
@@ -128,8 +128,8 @@ curl -X POST https://your-app-url.com/api/validate \
   "executionTimeMs": 5,
   "redactedText": "My email is [EMAIL_REDACTED]",
   "rateLimits": {
-    "perMinute": {"current": 1, "max": 100},
-    "perDay": {"current": 1, "max": 10000}
+    "perMinute": { "current": 1, "max": 100 },
+    "perDay": { "current": 1, "max": 10000 }
   }
 }
 ```
@@ -175,8 +175,8 @@ const result = await client.wrapLLMCall(
     return response.text;
   },
   'User prompt',
-  'profile-id-for-input',   // optional
-  'profile-id-for-output'   // optional
+  'profile-id-for-input', // optional
+  'profile-id-for-output', // optional
 );
 
 if (result.error) {
@@ -189,17 +189,20 @@ if (result.error) {
 ## Dashboard Features
 
 ### API Key Management
+
 - Create unlimited API keys with custom rate limits
 - View usage statistics per key
 - Deactivate keys instantly
 - Copy keys to clipboard
 
 ### Profile Management
+
 - View all built-in profiles
 - Create custom profiles with specific guardrail combinations
 - See guardrail counts per profile
 
 ### Usage Analytics
+
 - Total executions (all time)
 - Last 24 hours activity
 - Success rate percentage
@@ -207,6 +210,7 @@ if (result.error) {
 - Recent execution logs
 
 ### Test Playground
+
 - Test guardrails in real-time
 - Select any profile
 - Choose input or output validation
@@ -218,10 +222,12 @@ if (result.error) {
 ### Default Limits (Free Tier)
 
 **Per API Key:**
+
 - 100 requests per minute
 - 10,000 requests per day
 
 **Per User Account (all keys combined):**
+
 - 500 requests per minute
 - 50,000 requests per day
 
@@ -233,8 +239,8 @@ When exceeded (HTTP 429):
 {
   "error": "API key per-minute rate limit exceeded",
   "limits": {
-    "perMinute": {"current": 101, "max": 100},
-    "perDay": {"current": 5000, "max": 10000}
+    "perMinute": { "current": 101, "max": 100 },
+    "perDay": { "current": 5000, "max": 10000 }
   }
 }
 ```
@@ -253,10 +259,16 @@ When exceeded (HTTP 429):
 ### Guardrail System
 
 **Base Class Pattern:**
+
 ```typescript
 abstract class BaseGuardrail {
   abstract execute(text: string, context?: any): GuardrailResult;
-  protected createResult(passed, message, details?, redactedText?): GuardrailResult;
+  protected createResult(
+    passed,
+    message,
+    details?,
+    redactedText?,
+  ): GuardrailResult;
 }
 ```
 
@@ -282,12 +294,8 @@ export class CustomGuardrail extends BaseGuardrail {
   execute(text: string): GuardrailResult {
     // Your validation logic
     const passed = yourValidationLogic(text);
-    
-    return this.createResult(
-      passed,
-      'Your message',
-      { details: 'here' }
-    );
+
+    return this.createResult(passed, 'Your message', { details: 'here' });
   }
 }
 
