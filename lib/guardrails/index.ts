@@ -25,6 +25,7 @@ import { ConfidentialityGuardrail } from './output/confidentiality.guardrail';
 import { OutputSchemaValidationGuardrail } from './output/output-schema-validation.guardrail';
 import { CitationRequiredGuardrail } from './output/citation-required.guardrail';
 import { SandboxedOutputGuardrail } from './output/sandboxed-output.guardrail';
+import { QualityThresholdGuardrail } from './output/quality-threshold.guardrail';
 
 // Input
 guardrailRegistry.register('InputSize', (c) => new InputSizeGuardrail(c));
@@ -59,3 +60,4 @@ guardrailRegistry.register('Confidentiality', (c) => new ConfidentialityGuardrai
 guardrailRegistry.register('OutputSchemaValidation', (c) => new OutputSchemaValidationGuardrail(c));
 guardrailRegistry.register('CitationRequired', (c) => new CitationRequiredGuardrail(c));
 guardrailRegistry.register('SandboxedOutput', (c) => new SandboxedOutputGuardrail(c));
+guardrailRegistry.register('QualityThreshold', (c) => new QualityThresholdGuardrail(c));
