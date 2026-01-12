@@ -1,4 +1,4 @@
-import { GuardrailDescriptor } from '../guardrails/normalize';
+import { GuardrailDescriptor } from '@/modules/guardrails/descriptors/types';
 
 export interface RuntimeProfile {
   id: string;

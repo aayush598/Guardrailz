@@ -1,6 +1,6 @@
 // tests/integration/run-guardrails.test.ts
 import { describe, it, expect } from 'vitest';
-import { runGuardrails } from '@/lib/guardrails/service';
+import { runGuardrails } from '@/modules/guardrails/service/run-guardrails';
 
 // IMPORTANT: this side-effect import registers guardrails
 import '@/lib/guardrails';

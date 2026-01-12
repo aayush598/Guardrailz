@@ -5,7 +5,7 @@ import { db } from '@/shared/db/client';
 import { apiKeys, profiles, guardrailExecutions } from '@/shared/db/schema';
 import { and, eq } from 'drizzle-orm';
 import { checkRateLimit } from '@/lib/rate-limit';
-import { runGuardrails } from '@/lib/guardrails/service';
+import { runGuardrails } from '@/modules/guardrails/service/run-guardrails';
 
 export async function POST(req: NextRequest) {
   try {
