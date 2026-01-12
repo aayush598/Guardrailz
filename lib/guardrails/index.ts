@@ -29,6 +29,7 @@ import { CitationRequiredGuardrail } from './output/citation-required.guardrail'
 import { SandboxedOutputGuardrail } from './output/sandboxed-output.guardrail';
 import { QualityThresholdGuardrail } from './output/quality-threshold.guardrail';
 import { EnvVarLeakGuardrail } from './output/env-var-leak.guardrail';
+import { InternalEndpointLeakGuardrail } from './output/internal-endpoint.guardrail';
 
 import { TelemetryEnforcementGuardrail } from './operational/telemetry-enforcement.guardrail';
 import { ModelVersionPinGuardrail } from './operational/model-version-pin.guardrail';
@@ -75,6 +76,7 @@ guardrailRegistry.register('OutputSchemaValidation', (c) => new OutputSchemaVali
 guardrailRegistry.register('CitationRequired', (c) => new CitationRequiredGuardrail(c));
 guardrailRegistry.register('SandboxedOutput', (c) => new SandboxedOutputGuardrail(c));
 guardrailRegistry.register('QualityThreshold', (c) => new QualityThresholdGuardrail(c));
+guardrailRegistry.register('InternalEndpointLeak', (c) => new InternalEndpointLeakGuardrail(c));
 
 // Operational
 guardrailRegistry.register('TelemetryEnforcement', (c) => new TelemetryEnforcementGuardrail(c));
