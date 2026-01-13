@@ -1,11 +1,8 @@
-
 # Output Guardrails
 
 Output guardrails run **after the model generates a response**.
 
 They ensure that generated content is safe, compliant, and aligned with policy.
-
-
 
 ## What output guardrails protect against
 
@@ -15,8 +12,6 @@ They ensure that generated content is safe, compliant, and aligned with policy.
 - Confidential data exposure
 - Policy-violating content
 - Unstructured or invalid output
-
-
 
 ## Common output guardrails
 
@@ -32,8 +27,6 @@ They ensure that generated content is safe, compliant, and aligned with policy.
 - **Confidentiality Enforcement**  
   Prevents internal data exposure.
 
-
-
 ## Enforcement actions
 
 Output guardrails can:
@@ -44,8 +37,6 @@ Output guardrails can:
 - Downgrade confidence
 - Emit audit events
 
-
-
 ## Example flow
 
 1. Model generates output
@@ -54,15 +45,11 @@ Output guardrails can:
 4. Output is redacted or blocked
 5. Final response is returned
 
-
-
 ## Best practices
 
 - Use **PII redaction** by default
 - Require schemas for agent outputs
 - Enforce citations in regulated domains
-
-
 
 ## Next steps
 

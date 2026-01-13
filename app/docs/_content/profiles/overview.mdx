@@ -11,8 +11,6 @@ A profile represents a **policy bundle** that controls:
 
 Profiles are the **primary abstraction** used by Guardrails to apply safety, security, and compliance rules consistently across requests.
 
-
-
 ## Why profiles exist
 
 Without profiles, guardrails would need to be:
@@ -28,8 +26,6 @@ Profiles solve this by providing:
 - **Clear separation of concerns**
 - **Production-ready defaults**
 
-
-
 ## What a profile contains
 
 At a high level, a profile includes:
@@ -42,8 +38,6 @@ At a high level, a profile includes:
 
 Each guardrail is defined declaratively with optional configuration.
 
-
-
 ## When profiles are applied
 
 Profiles are resolved and compiled:
@@ -54,8 +48,6 @@ Profiles are resolved and compiled:
 
 The compiled profile is then executed by the Guardrails engine.
 
-
-
 ## Profile lifecycle
 
 1. Profile is defined (built-in or custom)
@@ -63,8 +55,6 @@ The compiled profile is then executed by the Guardrails engine.
 3. Profile is compiled into executable guardrails
 4. Guardrails are executed
 5. Analytics are recorded
-
-
 
 ## Next steps
 

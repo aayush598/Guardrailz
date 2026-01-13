@@ -4,8 +4,6 @@ Guardrails is designed as a **layered, domain-driven system** that cleanly separ
 
 This architecture enables Guardrails to scale from small projects to large enterprise platforms.
 
-
-
 ## High-level system overview
 
 At a high level, Guardrails consists of:
@@ -17,8 +15,6 @@ At a high level, Guardrails consists of:
 5. **SDK & API Layer**
 
 Each layer is independently evolvable.
-
-
 
 ## Guardrails Engine
 
@@ -36,25 +32,23 @@ Key characteristics:
 - Typed inputs and outputs
 - Explicit execution stages (input, output, tool, general)
 
-
-
 ## Profiles & configuration
 
 Profiles define **which guardrails apply** and **how they are configured**.
 
 Examples:
+
 - Default production profile
 - Enterprise security profile
 - Child safety profile
 - Custom organization profiles
 
 Profiles are:
+
 - Versionable
 - Composable
 - Stored and compiled at runtime
 - Decoupled from execution logic
-
-
 
 ## Execution pipeline
 
@@ -68,13 +62,12 @@ A typical execution flow:
 6. Final decision returned
 
 The pipeline supports:
+
 - Blocking
 - Warning
 - Redaction
 - Modification
 - Telemetry emission
-
-
 
 ## Analytics & observability
 
@@ -86,12 +79,11 @@ Every execution can emit structured analytics events, including:
 - Failure reasons
 
 Analytics is designed as:
+
 - Event-driven
 - Extensible
 - Queryable for dashboards
 - Safe for compliance use cases
-
-
 
 ## SDK & API layer
 
@@ -103,11 +95,10 @@ The SDK provides:
 - Easy integration for developers
 
 The API layer:
+
 - Exposes validation and management endpoints
 - Enforces authentication and authorization
 - Serves as the integration boundary
-
-
 
 ## Architectural benefits
 
@@ -119,11 +110,8 @@ This architecture enables:
 - SDKs for multiple languages
 - Long-term maintainability
 
-
-
 ## Next steps
 
 - Understand the building blocks → **Core Concepts**
 - Learn how guardrails are executed → **Guardrails Overview**
 - Explore analytics → **Analytics Overview**
-

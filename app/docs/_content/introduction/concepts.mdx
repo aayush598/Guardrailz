@@ -4,25 +4,23 @@ This section introduces the key concepts you need to understand when working wit
 
 These concepts form the mental model of the system.
 
-
-
 ## Guardrail
 
 A **guardrail** is a unit of logic that evaluates content or context and produces a structured result.
 
 A guardrail:
+
 - Has a name and stage
 - Receives input and context
 - Returns a decision (allow, warn, block, modify)
 - Can attach metadata
 
 Examples:
+
 - Input size limits
 - Prompt injection detection
 - PII redaction
 - Tool access control
-
-
 
 ## Guardrail stages
 
@@ -35,24 +33,22 @@ Guardrails run in specific stages:
 
 Stages allow precise control over when enforcement happens.
 
-
-
 ## Profile
 
 A **profile** is a collection of guardrails and configurations.
 
 Profiles allow you to:
+
 - Apply consistent policies
 - Switch behavior by use case
 - Manage complexity at scale
 
 Profiles can be:
+
 - Built-in
 - Organization-specific
 - User-specific
 - Environment-specific
-
-
 
 ## Guardrail result
 
@@ -66,8 +62,6 @@ Each guardrail returns a structured result containing:
 
 Results are aggregated into a single execution response.
 
-
-
 ## Execution context
 
 The **execution context** provides additional information to guardrails, such as:
@@ -80,35 +74,32 @@ The **execution context** provides additional information to guardrails, such as
 
 This enables context-aware enforcement.
 
-
-
 ## Analytics event
 
 An **analytics event** captures what happened during execution.
 
 Events include:
+
 - Guardrail execution events
 - Profile usage events
 - Rate-limit events
 
 Events power:
+
 - Dashboards
 - Alerts
 - Compliance reporting
-
-
 
 ## SDK client
 
 The **SDK client** is the developer-facing interface for interacting with Guardrails.
 
 It abstracts:
+
 - API calls
 - Authentication
 - Error handling
 - Retries and timeouts
-
-
 
 ## Putting it together
 
@@ -122,11 +113,8 @@ In practice:
 
 This flow repeats consistently across all use cases.
 
-
-
 ## Next steps
 
 - Try Guardrails quickly → **Quickstart**
 - Learn guardrails in depth → **Guardrails Overview**
 - Explore profiles → **Profiles Overview**
-

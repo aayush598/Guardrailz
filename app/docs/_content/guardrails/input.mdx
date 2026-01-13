@@ -1,11 +1,8 @@
-
 # Input Guardrails
 
 Input guardrails protect your system **before the model is invoked**.
 
 They validate, sanitize, and constrain incoming data to prevent unsafe or malicious inputs.
-
-
 
 ## What input guardrails protect against
 
@@ -16,8 +13,6 @@ They validate, sanitize, and constrain incoming data to prevent unsafe or malici
 - PII / PHI exposure
 - Unsafe or disallowed content
 - Encoding and obfuscation tricks
-
-
 
 ## Common input guardrails
 
@@ -35,8 +30,6 @@ Examples include:
 - **NSFW / Hate / Violence Detection**  
   Enforces content safety policies.
 
-
-
 ## Execution behavior
 
 Input guardrails run in this order:
@@ -45,8 +38,6 @@ Input guardrails run in this order:
 2. Execute configured guardrails
 3. Stop on block (if configured)
 4. Emit analytics events
-
-
 
 ## Example behavior
 
@@ -57,16 +48,12 @@ If a prompt contains an API key:
 - Analytics are emitted
 - A structured error is returned
 
-
-
 ## Best practices
 
 - Always include **Input Size**
 - Always include **Secrets Detection**
 - Use stricter policies for public APIs
 - Use relaxed policies for internal tools
-
-
 
 ## Next steps
 

@@ -1,14 +1,12 @@
-
 # Quickstart
 
 This guide shows how to run your **first Guardrails validation** in under 5 minutes.
 
 You’ll learn how to:
+
 - Choose a profile
 - Validate input
 - Interpret results
-
-
 
 ## Step 1: Initialize the client
 
@@ -18,9 +16,7 @@ import { GuardrailsClient } from '@aayushgid/guardrailz-sdk';
 const guardrails = new GuardrailsClient({
   apiKey: process.env.GUARDRAILS_API_KEY!,
 });
-````
-
-
+```
 
 ## Step 2: Validate user input
 
@@ -31,8 +27,6 @@ const result = await guardrails.validate({
   validationType: 'input',
 });
 ```
-
-
 
 ## Step 3: Inspect the result
 
@@ -52,13 +46,11 @@ const result = await guardrails.validate({
 
 ### Key fields explained
 
-| Field             | Description                             |
-| -- |  |
-| `passed`          | Whether the input passed all guardrails |
-| `violations`      | Failed guardrails with details          |
-| `executionTimeMs` | Total execution latency                 |
-
-
+| Field | Description |
+| -- | |
+| `passed` | Whether the input passed all guardrails |
+| `violations` | Failed guardrails with details |
+| `executionTimeMs` | Total execution latency |
 
 ## Step 4: Enforce behavior
 
@@ -78,8 +70,6 @@ if (!result.passed) {
 }
 ```
 
-
-
 ## Using different profiles
 
 ```ts
@@ -91,8 +81,6 @@ await guardrails.validate({
 
 Profiles let you switch enforcement logic **without changing code**.
 
-
-
 ## What happens under the hood?
 
 1. Input is normalized
@@ -103,10 +91,8 @@ Profiles let you switch enforcement logic **without changing code**.
 
 All within milliseconds.
 
-
-
 ## Next steps
 
-* Explore the Playground → **Playground**
-* Learn about profiles → **Profiles**
-* Understand guardrail types → **Concepts**
+- Explore the Playground → **Playground**
+- Learn about profiles → **Profiles**
+- Understand guardrail types → **Concepts**

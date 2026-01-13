@@ -1,20 +1,15 @@
-
 # Guardrails & Validation
 
 The SDK exposes a single primary operation: **validation**.
 
 Validation applies a Guardrail profile to content and returns a structured result.
 
-
-
 ## Validation types
 
-| Type | Description |
-|-|-|
-| input | Validate user input |
+| Type   | Description           |
+| ------ | --------------------- |
+| input  | Validate user input   |
 | output | Validate model output |
-
-
 
 ## Basic validation
 
@@ -26,8 +21,6 @@ const result = await client.validate({
 });
 ```
 
-
-
 ## Validation response
 
 ```ts
@@ -38,19 +31,15 @@ const result = await client.validate({
 }
 ```
 
-
-
 ## Handling failures
 
 ```ts
 if (!result.passed) {
-  result.violations.forEach(v => {
+  result.violations.forEach((v) => {
     console.log(v.guardrail, v.message);
   });
 }
 ```
-
-
 
 ## Profiles
 
@@ -65,21 +54,15 @@ Examples:
 
 Profiles can be managed in the dashboard or via API.
 
-
-
 ## Advanced usage
 
 You can dynamically choose profiles:
 
 ```ts
-const profile = user.isEnterprise
-  ? 'enterprise_security'
-  : 'default';
+const profile = user.isEnterprise ? 'enterprise_security' : 'default';
 
 await client.validate({ text, profileName: profile });
 ```
-
-
 
 ## Next steps
 

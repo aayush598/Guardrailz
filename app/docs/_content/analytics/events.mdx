@@ -4,8 +4,6 @@ Analytics events are the **atomic unit** of observability in Guardrails.
 
 Every meaningful runtime action emits a structured event that can be stored, queried, and analyzed.
 
-
-
 ## Event model
 
 All analytics events share a common envelope:
@@ -19,8 +17,6 @@ All analytics events share a common envelope:
 - `payload` – event-specific data
 
 This model ensures consistency across event types.
-
-
 
 ## Core event types
 
@@ -37,8 +33,6 @@ Includes:
 
 This is the most common and important event type.
 
-
-
 ### Profile used
 
 Emitted when a guardrail profile is resolved and applied.
@@ -48,8 +42,6 @@ Useful for:
 - Tracking profile adoption
 - Auditing configuration usage
 - Comparing profile effectiveness
-
-
 
 ### Rate limit hit
 
@@ -63,8 +55,6 @@ Includes:
 
 Used for abuse detection and capacity planning.
 
-
-
 ## Event immutability
 
 Analytics events are **append-only** and **immutable**.
@@ -75,15 +65,11 @@ This guarantees:
 - Reliable audits
 - Tamper-resistant logs
 
-
-
 ## Event extensibility
 
 New event types can be added without breaking existing analytics.
 
 This allows Guardrails to evolve as new safety and compliance needs emerge.
-
-
 
 ## Next steps
 

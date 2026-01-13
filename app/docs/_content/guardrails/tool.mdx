@@ -1,11 +1,8 @@
-
 # Tool Guardrails
 
 Tool guardrails control **what tools an AI system can use and how**.
 
 They are critical for agentic and autonomous AI systems.
-
-
 
 ## Why tool guardrails matter
 
@@ -16,8 +13,6 @@ Without controls, agents can:
 - Access unauthorized APIs
 - Escalate privileges
 - Leak secrets via tools
-
-
 
 ## Common tool guardrails
 
@@ -33,8 +28,6 @@ Without controls, agents can:
 - **Destructive Action Detection**  
   Blocks irreversible operations.
 
-
-
 ## Enforcement model
 
 Tool guardrails run:
@@ -42,8 +35,6 @@ Tool guardrails run:
 - Before tool execution
 - With full context (arguments, user, profile)
 - In deterministic order
-
-
 
 ## Example scenario
 
@@ -53,16 +44,12 @@ If an agent attempts to delete a database:
 - The tool call is denied
 - An audit event is emitted
 
-
-
 ## Best practices
 
 - Default to deny
 - Explicitly allow tools
 - Use separate profiles for agents
 - Log every tool invocation
-
-
 
 ## Next steps
 

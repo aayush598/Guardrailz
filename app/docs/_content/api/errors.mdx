@@ -2,8 +2,6 @@
 
 Guardrails APIs return **structured, predictable errors** to simplify handling and debugging.
 
-
-
 ## Error Format
 
 ```json
@@ -11,9 +9,7 @@ Guardrails APIs return **structured, predictable errors** to simplify handling a
   "error": "InvalidProfile",
   "message": "Profile 'unknown-profile' does not exist"
 }
-````
-
-
+```
 
 ## Common Errors
 
@@ -44,20 +40,16 @@ Guardrails APIs return **structured, predictable errors** to simplify handling a
 }
 ```
 
-
-
 ## HTTP Status Codes
 
-| Code | Meaning            |
-| - |  |
-| 400  | Invalid request    |
-| 401  | Unauthorized       |
-| 403  | Forbidden          |
-| 404  | Resource not found |
-| 429  | Rate limited       |
-| 500  | Internal error     |
-
-
+| Code | Meaning |
+| - | |
+| 400 | Invalid request |
+| 401 | Unauthorized |
+| 403 | Forbidden |
+| 404 | Resource not found |
+| 429 | Rate limited |
+| 500 | Internal error |
 
 ## SDK Error Handling
 
@@ -71,13 +63,11 @@ try {
 }
 ```
 
-
-
 ## Best Practices
 
-* Log error `code` and `message`
-* Retry only idempotent requests
-* Treat `429` as backpressure
+- Log error `code` and `message`
+- Retry only idempotent requests
+- Treat `429` as backpressure
 
 ```
 
@@ -85,8 +75,9 @@ try {
 
 ## What you now have
 
-✔ Clean, professional API docs  
-✔ SDK-aligned examples  
-✔ Scalable content structure  
-✔ Zero React logic in MDX  
-✔ Ready for versioning & search  
+✔ Clean, professional API docs
+✔ SDK-aligned examples
+✔ Scalable content structure
+✔ Zero React logic in MDX
+✔ Ready for versioning & search
+```

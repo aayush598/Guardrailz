@@ -1,9 +1,6 @@
-
 # Scaling
 
 Guardrails is designed to scale with your application, from early prototypes to high-throughput production systems.
-
-
 
 ## Horizontal scalability
 
@@ -12,8 +9,6 @@ Guardrails services are stateless and support:
 - Horizontal scaling
 - Load-balanced deployments
 - Multi-region architectures
-
-
 
 ## Rate limiting
 
@@ -24,11 +19,10 @@ Built-in rate limit guardrails help:
 - Prevent abuse
 
 Limits can be configured per:
+
 - User
 - API key
 - Profile
-
-
 
 ## High-volume workloads
 
@@ -39,8 +33,6 @@ For high-throughput use cases:
 - Monitor execution latency
 - Tune guardrail profiles for performance
 
-
-
 ## Performance considerations
 
 Execution latency depends on:
@@ -50,22 +42,20 @@ Execution latency depends on:
 - External classifiers (if used)
 
 Best practices:
+
 - Start with essential guardrails
 - Add additional checks incrementally
 - Measure before optimizing
 
-
-
 ## Caching strategies
 
 You can safely cache:
+
 - Profile definitions
 - Guardrail configurations
 - Static metadata
 
 Do **not** cache validation results unless inputs are identical.
-
-
 
 ## Observability at scale
 
@@ -75,8 +65,6 @@ As traffic grows, rely on analytics to:
 - Identify slow guardrails
 - Track success rates
 - Monitor failure spikes
-
-
 
 ## Failure handling
 
@@ -88,8 +76,6 @@ Guardrails supports configurable behavior:
 - Fail open (advanced scenarios)
 
 Choose behavior based on risk tolerance.
-
-
 
 ## Next steps
 
