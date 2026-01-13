@@ -16,37 +16,15 @@ import {
 import Link from 'next/link';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
-import { Badge } from '@/shared/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
-
-interface AnalyticsData {
-  overview: {
-    totalExecutions: number;
-    totalPassed: number;
-    totalFailed: number;
-    avgExecutionTime: number;
-    successRate: number;
-    changeFromLastPeriod: {
-      executions: number;
-      successRate: number;
-      avgTime: number;
-    };
-  };
-  hourlyDistribution: {
-    hour: number;
-    executions: number;
-  }[];
-  guardrailStats: any[];
-  profileStats: any[];
-  topErrors: any[];
-}
+import type { AnalyticsReadModel } from '@/modules/analytics';
 
 export default function AnalyticsClient({
   analytics,
   range,
 }: {
-  analytics: AnalyticsData;
+  analytics: AnalyticsReadModel;
   range: string;
 }) {
   const formatChange = (v: number) => {
@@ -157,7 +135,7 @@ function Stat({
   change,
 }: {
   title: string;
-  value: any;
+  value: string | number;
   icon: React.ReactNode;
   change?: React.ReactNode;
 }) {
