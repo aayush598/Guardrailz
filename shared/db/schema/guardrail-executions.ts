@@ -11,6 +11,7 @@ import {
 import { users } from './users';
 import { apiKeys } from './api-keys';
 import { profiles } from './profiles';
+import type { GuardrailResult } from '@/modules/guardrails/descriptors/types';
 
 export const guardrailExecutions = pgTable(
   'guardrail_executions',
@@ -25,7 +26,7 @@ export const guardrailExecutions = pgTable(
     profileId: uuid('profile_id').references(() => profiles.id),
     inputText: text('input_text'),
     outputText: text('output_text'),
-    guardrailResults: jsonb('guardrail_results').notNull().$type<any[]>(),
+    guardrailResults: jsonb('guardrail_results').notNull().$type<GuardrailResult[]>(),
     passed: boolean('passed').notNull(),
     executionTimeMs: integer('execution_time_ms'),
     createdAt: timestamp('created_at').defaultNow().notNull(),

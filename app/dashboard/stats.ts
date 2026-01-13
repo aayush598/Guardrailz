@@ -50,7 +50,7 @@ const getDashboardStatsCached = unstable_cache(
     /* Aggregate failed guardrails */
     const failedMap = new Map<string, number>();
     failedExecutions.forEach((e) => {
-      (e.guardrailResults as any[])?.forEach((r) => {
+      e.guardrailResults.forEach((r) => {
         if (!r.passed) {
           failedMap.set(r.guardrailName, (failedMap.get(r.guardrailName) || 0) + 1);
         }
