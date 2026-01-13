@@ -3,13 +3,17 @@
 import { useEffect, useState } from 'react';
 import { createDocsSearch } from '../_search/search-client';
 import { useDocsSearch } from '../_search/use-docs-search';
+import type { DocsSearchDocument, DocsSearchResult } from '../_search/types';
+import type MiniSearch from 'minisearch';
+import type { SearchResult } from 'minisearch';
+
 import Link from 'next/link';
 
 export function DocsSearch() {
   const { open, setOpen } = useDocsSearch();
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<any[]>([]);
-  const [search, setSearch] = useState<any>(null);
+  const [results, setResults] = useState<DocsSearchResult[]>([]);
+  const [search, setSearch] = useState<MiniSearch<DocsSearchDocument> | null>(null);
 
   useEffect(() => {
     createDocsSearch().then(setSearch);
@@ -20,7 +24,16 @@ export function DocsSearch() {
       setResults([]);
       return;
     }
-    setResults(search.search(query, { prefix: true }).slice(0, 10));
+    const rawResults = search.search(query, { prefix: true }).slice(0, 10);
+
+    setResults(
+      rawResults.map((r: SearchResult) => ({
+        id: r.id as string,
+        title: r.title as string,
+        slug: r.slug as string,
+        section: r.section as string,
+      })),
+    );
   }, [query, search]);
 
   if (!open) return null;

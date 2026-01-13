@@ -5,3 +5,10 @@ export interface DocsSearchDocument {
   content: string;
   section: string;
 }
+
+export interface DocsSearchResult {
+  id: string;
+  title: string;
+  slug: string;
+  section: string;
+}
