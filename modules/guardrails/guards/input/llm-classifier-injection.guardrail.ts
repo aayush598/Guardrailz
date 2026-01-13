@@ -14,6 +14,12 @@ export interface LLMClassifierInjectionConfig {
   enableExplainability?: boolean;
 }
 
+interface ResolvedLLMClassifierInjectionConfig {
+  blockThreshold: number;
+  warnThreshold: number;
+  enableExplainability: boolean;
+}
+
 /* ============================================================================
  * Internal signal model
  * ========================================================================== */
@@ -27,7 +33,7 @@ interface InjectionSignal {
 /* ============================================================================
  * Guardrail
  * ========================================================================== */
-export class LLMClassifierInjectionGuardrail extends BaseGuardrail<LLMClassifierInjectionConfig> {
+export class LLMClassifierInjectionGuardrail extends BaseGuardrail<ResolvedLLMClassifierInjectionConfig> {
   constructor(config: LLMClassifierInjectionConfig = {}) {
     super('LLMClassifierInjection', 'input', {
       blockThreshold: config.blockThreshold ?? 0.8,
