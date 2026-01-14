@@ -1,12 +1,18 @@
 'use client';
 
-import { ShieldCheck, Lock, Zap, FileCode } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ShieldCheck, Lock, Zap, FileCode, Plus } from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
+import { Button } from '@/shared/ui/button';
 
 import type { GuardrailDescriptor } from '@/modules/guardrails/descriptors/types';
 import type { LucideIcon } from 'lucide-react';
+
+import { CreateProfileDialog } from './CreateProfileDialog';
+import { EditProfileDialog } from './EditProfileDialog';
+import { DeleteProfileButton } from './DeleteProfileButton';
 
 interface Profile {
   id: string;
@@ -26,14 +32,40 @@ const PROFILE_ICON_MAP: Record<string, LucideIcon> = {
   minimal: FileCode,
 };
 
-export default function ProfilesClient({ profiles }: { profiles: Profile[] }) {
+export default function ProfilesClient({ profiles: initialProfiles }: { profiles: Profile[] }) {
+  const [profiles, setProfiles] = useState(initialProfiles);
+  const [allGuardrails, setAllGuardrails] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetch('/api/guardrails/catalog')
+      .then((r) => r.json())
+      .then((d: { guardrails: { name: string }[] }) =>
+        setAllGuardrails(d.guardrails.map((g) => g.name)),
+      );
+  }, []);
+
   return (
     <div className="p-6">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-slate-900">Guardrail Profiles</h1>
-        <p className="mt-1 text-slate-600">Pre-built and custom security configurations</p>
+      {/* HEADER */}
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900">Guardrail Profiles</h1>
+          <p className="mt-1 text-slate-600">Pre-built and custom security configurations</p>
+        </div>
+
+        <CreateProfileDialog
+          onCreated={(profile) => {
+            setProfiles((prev) => [profile, ...prev]);
+          }}
+        >
+          <Button>
+            <Plus className="mr-2 h-4 w-4" />
+            Create Profile
+          </Button>
+        </CreateProfileDialog>
       </div>
 
+      {/* GRID */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {profiles.map((profile) => {
           const Icon = PROFILE_ICON_MAP[profile.name.toLowerCase()] || ShieldCheck;
@@ -51,25 +83,48 @@ export default function ProfilesClient({ profiles }: { profiles: Profile[] }) {
                   </div>
                 </div>
 
-                {profile.isBuiltIn && <Badge variant="secondary">Built-in</Badge>}
+                {profile.isBuiltIn ? (
+                  <Badge variant="secondary">Built-in</Badge>
+                ) : (
+                  <Badge>Custom</Badge>
+                )}
               </CardHeader>
 
-              <CardContent className="grid grid-cols-3 gap-3 text-sm">
-                <Stat
-                  icon={<Lock className="h-4 w-4" />}
-                  label="Input"
-                  value={profile.inputGuardrails.length}
-                />
-                <Stat
-                  icon={<ShieldCheck className="h-4 w-4" />}
-                  label="Output"
-                  value={profile.outputGuardrails.length}
-                />
-                <Stat
-                  icon={<Zap className="h-4 w-4" />}
-                  label="Tool"
-                  value={profile.toolGuardrails.length}
-                />
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-3 gap-3 text-sm">
+                  <Stat
+                    icon={<Lock className="h-4 w-4" />}
+                    label="Input"
+                    value={profile.inputGuardrails.length}
+                  />
+                  <Stat
+                    icon={<ShieldCheck className="h-4 w-4" />}
+                    label="Output"
+                    value={profile.outputGuardrails.length}
+                  />
+                  <Stat
+                    icon={<Zap className="h-4 w-4" />}
+                    label="Tool"
+                    value={profile.toolGuardrails.length}
+                  />
+                </div>
+
+                {!profile.isBuiltIn && (
+                  <div className="flex gap-2">
+                    <EditProfileDialog
+                      profile={profile}
+                      allGuardrails={allGuardrails}
+                      onUpdated={(updated) =>
+                        setProfiles((p) => p.map((x) => (x.id === updated.id ? updated : x)))
+                      }
+                    />
+
+                    <DeleteProfileButton
+                      profileId={profile.id}
+                      onDeleted={() => setProfiles((p) => p.filter((x) => x.id !== profile.id))}
+                    />
+                  </div>
+                )}
               </CardContent>
             </Card>
           );
