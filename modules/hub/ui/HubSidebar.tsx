@@ -63,34 +63,36 @@ export function HubSidebar({
 
         <div className="divide-y divide-slate-100 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
           {/* Total Row */}
-          <div className="flex items-center justify-between p-3.5 transition-colors hover:bg-slate-50">
-            <div className="flex items-center gap-3">
-              <LayoutGrid size={16} className="text-slate-400" />
-              <span className="text-[13px] font-medium text-slate-600">Total Items</span>
+          <div className="flex items-center justify-between px-3 py-3 transition-colors hover:bg-slate-50">
+            <div className="flex min-w-0 items-center gap-3">
+              <LayoutGrid size={16} className="shrink-0 text-slate-400" />
+              <span className="truncate text-[13px] font-medium text-slate-600">Total Items</span>
             </div>
-            <span className="text-sm font-bold tabular-nums text-slate-900">
+            <span className="ml-2 text-sm font-bold tabular-nums text-slate-900">
               {stats.total.toLocaleString()}
             </span>
           </div>
 
           {/* Guardrails Row */}
-          <div className="flex items-center justify-between p-3.5 transition-colors hover:bg-slate-50">
-            <div className="flex items-center gap-3">
-              <ShieldCheck size={16} className="text-indigo-500" />
-              <span className="text-[13px] font-medium text-slate-600">Guardrails</span>
+          <div className="flex items-center justify-between px-3 py-3 transition-colors hover:bg-slate-50">
+            <div className="flex min-w-0 items-center gap-3">
+              <ShieldCheck size={16} className="shrink-0 text-indigo-500" />
+              <span className="truncate text-[13px] font-medium text-slate-600">Guardrails</span>
             </div>
-            <span className="text-sm font-bold tabular-nums text-slate-900">
+            <span className="ml-2 text-sm font-bold tabular-nums text-slate-900">
               {stats.guardrails}
             </span>
           </div>
 
           {/* Profiles Row */}
-          <div className="flex items-center justify-between p-3.5 transition-colors hover:bg-slate-50">
-            <div className="flex items-center gap-3">
-              <Database size={16} className="text-emerald-500" />
-              <span className="text-[13px] font-medium text-slate-600">Profiles</span>
+          <div className="flex items-center justify-between px-3 py-3 transition-colors hover:bg-slate-50">
+            <div className="flex min-w-0 items-center gap-3">
+              <Database size={16} className="shrink-0 text-emerald-500" />
+              <span className="truncate text-[13px] font-medium text-slate-600">Profiles</span>
             </div>
-            <span className="text-sm font-bold tabular-nums text-slate-900">{stats.profiles}</span>
+            <span className="ml-2 text-sm font-bold tabular-nums text-slate-900">
+              {stats.profiles}
+            </span>
           </div>
         </div>
       </div>
