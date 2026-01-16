@@ -311,63 +311,103 @@ export default function LandingPageClient() {
             {[
               {
                 name: 'Default',
-                desc: 'Balanced security and performance for general-purpose applications',
+                desc: 'Baseline security and safety guardrails for standard AI interactions',
                 icon: ShieldCheck,
-                guardrails: 7,
-                color: 'blue',
+                guardrails: 4,
+                href: '/hub/profiles/default',
+                bgColor: 'bg-blue-50',
+                textColor: 'text-blue-700',
+                borderColor: 'group-hover:border-blue-200',
+                iconColor: 'text-blue-600',
               },
               {
                 name: 'Enterprise Security',
-                desc: 'Maximum protection with strict controls for business-critical systems',
+                desc: 'Enterprise-grade security with strict controls and tight input limits',
                 icon: Building2,
-                guardrails: 15,
-                color: 'purple',
+                guardrails: 3,
+                href: '/hub/profiles/enterprise-security',
+                bgColor: 'bg-purple-50',
+                textColor: 'text-purple-700',
+                borderColor: 'group-hover:border-purple-200',
+                iconColor: 'text-purple-600',
               },
               {
                 name: 'Child Safety',
-                desc: 'Content filtering and safety measures for educational platforms',
+                desc: 'Maximum safety and content filtering for children and education',
                 icon: Baby,
-                guardrails: 10,
-                color: 'pink',
+                guardrails: 3,
+                href: '/hub/profiles/child-safety',
+                bgColor: 'bg-pink-50',
+                textColor: 'text-pink-700',
+                borderColor: 'group-hover:border-pink-200',
+                iconColor: 'text-pink-600',
               },
               {
                 name: 'Healthcare',
-                desc: 'HIPAA-compliant guardrails for protected health information',
+                desc: 'HIPAA-aligned guardrails for healthcare and clinical AI systems',
                 icon: HeartPulse,
-                guardrails: 8,
-                color: 'green',
+                guardrails: 9,
+                href: '/hub/profiles/healthcare-hipaa',
+                bgColor: 'bg-green-50',
+                textColor: 'text-green-700',
+                borderColor: 'group-hover:border-green-200',
+                iconColor: 'text-green-600',
               },
               {
                 name: 'Financial',
-                desc: 'Regulatory compliance for banking and financial services',
+                desc: 'Compliance-focused guardrails for banking, fintech, and payments',
                 icon: Landmark,
-                guardrails: 9,
-                color: 'yellow',
+                guardrails: 10,
+                href: '/hub/profiles/financial-services',
+                bgColor: 'bg-amber-50',
+                textColor: 'text-amber-700',
+                borderColor: 'group-hover:border-amber-200',
+                iconColor: 'text-amber-600',
               },
               {
                 name: 'Minimal',
-                desc: 'Lightweight validation for development and testing environments',
+                desc: 'Lightweight guardrails for development, testing, and experimentation',
                 icon: Wrench,
                 guardrails: 1,
-                color: 'gray',
+                href: '/hub/guardrails/gdpr-data-minimization', // Mapping as requested
+                bgColor: 'bg-slate-100',
+                textColor: 'text-slate-700',
+                borderColor: 'group-hover:border-slate-300',
+                iconColor: 'text-slate-600',
               },
             ].map((profile) => (
               <Card
                 key={profile.name}
-                className="group cursor-pointer border-gray-200 bg-gradient-to-br from-white to-gray-50 transition-all duration-300 hover:border-gray-300 hover:shadow-xl"
+                onClick={() => router.push(profile.href)}
+                className={`group cursor-pointer border-gray-200 bg-white transition-all duration-500 hover:-translate-y-2 hover:border-gray-400 hover:shadow-2xl hover:shadow-gray-200/50 ${profile.borderColor} border-2`}
               >
-                <CardContent className="pt-8">
-                  <div className="mb-4 flex items-start justify-between">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-gray-200 bg-gradient-to-br from-gray-100 to-white transition-transform group-hover:scale-105">
-                      <profile.icon className="h-7 w-7 text-gray-700" />
+                <CardContent className="p-7">
+                  <div className="mb-6 flex items-start justify-between">
+                    <div
+                      className={`flex h-12 w-12 items-center justify-center rounded-2xl ${profile.bgColor} transition-transform duration-500 group-hover:rotate-3 group-hover:scale-110`}
+                    >
+                      <profile.icon className={`h-6 w-6 ${profile.iconColor}`} />
                     </div>
 
-                    <div className="rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-gray-700">
-                      {profile.guardrails} guardrails
+                    <div
+                      className={`inline-flex items-center rounded-full ${profile.bgColor} px-3 py-1 text-[11px] font-bold uppercase tracking-wider ${profile.textColor}`}
+                    >
+                      {profile.guardrails} Guardrails
                     </div>
                   </div>
-                  <h4 className="mb-2 text-xl font-bold text-gray-900">{profile.name}</h4>
-                  <p className="text-sm leading-relaxed text-gray-600">{profile.desc}</p>
+
+                  <h4 className="font-jakarta mb-3 text-xl font-bold tracking-tight text-gray-900 group-hover:text-gray-800">
+                    {profile.name}
+                  </h4>
+
+                  <p className="font-inter text-sm leading-relaxed text-gray-500 group-hover:text-gray-600">
+                    {profile.desc}
+                  </p>
+
+                  <div className="mt-6 flex items-center text-xs font-semibold text-gray-400 transition-colors group-hover:text-gray-900">
+                    View Details
+                    <ChevronRight className="ml-1 h-3 w-3 transition-transform group-hover:translate-x-1" />
+                  </div>
                 </CardContent>
               </Card>
             ))}
