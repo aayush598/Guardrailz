@@ -92,7 +92,7 @@ export default function LandingPageClient() {
                   <Button
                     size="lg"
                     onClick={() => router.push('/dashboard')}
-                    className="group bg-gradient-to-r from-gray-600 to-gray-600 px-8 py-6 text-lg text-white shadow-xl shadow-gray-500/30 transition-all duration-300 hover:from-gray-700 hover:to-gray-700 hover:shadow-2xl hover:shadow-gray-500/40"
+                    className="group border-2 border-transparent bg-gradient-to-r from-gray-600 to-gray-600 px-8 py-6 text-lg text-white shadow-xl shadow-gray-500/30 transition-all duration-300 hover:from-gray-700 hover:to-gray-700 hover:shadow-2xl hover:shadow-gray-500/40"
                   >
                     Start Free Trial
                     <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
