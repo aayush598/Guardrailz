@@ -65,7 +65,7 @@ export default function LandingPageClient() {
           />
         </div>
 
-        <section className="relative py-12 sm:py-16 lg:py-20 lg:pb-36">
+        <section className="relative pb-12 pt-4 sm:pb-16 sm:pt-6 lg:pb-36 lg:pt-8">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto grid max-w-lg grid-cols-1 gap-y-12 lg:max-w-full lg:grid-cols-2 lg:items-center lg:gap-x-8">
               <div>
@@ -188,21 +188,34 @@ export default function LandingPageClient() {
                       <div className="h-2.5 w-2.5 rounded-full bg-green-500"></div>
                     </div>
 
-                    <code className="font-mono text-sm leading-relaxed text-gray-300">
-                      <span className="text-purple-400">const</span> response ={' '}
-                      <span className="text-purple-400">await</span>{' '}
-                      <span className="text-blue-400">fetch</span>(<br />
-                      &nbsp;&nbsp;
-                      <span className="text-green-400">
-                        `&apos;`https://guardrailz.vercel.app/validate`&apos;`
-                      </span>
-                      ,<br />
-                      &nbsp;&nbsp;{'{'} headers: {'{'}{' '}
-                      <span className="text-orange-400">`&apos;`X-API-Key`&apos;`</span>: key {'}'}{' '}
-                      {'}'}
-                      <br />
-                      );
-                    </code>
+                    <pre className="font-mono text-xs leading-normal text-gray-300 md:text-sm">
+                      <code>
+                        <span className="text-purple-400">const</span> client ={' '}
+                        <span className="text-purple-400">new</span>{' '}
+                        <span className="text-yellow-400">GuardrailsClient</span>({'{'}
+                        <br />
+                        &nbsp;&nbsp;apiKey:{' '}
+                        <span className="text-green-400">`&apos;`grd_live_...`&apos;`</span>
+                        <br />
+                        {'}'});
+                        <br />
+                        <br />
+                        <span className="text-purple-400">const</span> res ={' '}
+                        <span className="text-purple-400">await</span> client.
+                        <span className="text-blue-400">validate</span>({'{'}
+                        <br />
+                        &nbsp;&nbsp;text:{' '}
+                        <span className="text-green-400">`&apos;`Hello SDK test`&apos;`</span>,
+                        <br />
+                        &nbsp;&nbsp;profileName:{' '}
+                        <span className="text-green-400">`&apos;`default`&apos;`</span>
+                        <br />
+                        &nbsp;&nbsp;validationType:{' '}
+                        <span className="text-green-400">`&apos;`input`&apos;`</span>
+                        <br />
+                        {'}'});
+                      </code>
+                    </pre>
                   </div>
                 </div>
               </div>
