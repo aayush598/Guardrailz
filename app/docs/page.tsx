@@ -21,14 +21,14 @@ export default function DocsHomePage() {
       icon: Shield,
       title: 'Security',
       description: 'Learn about security features and best practices',
-      href: '/docs/guides/security',
+      href: '/docs/deployment/security',
       color: 'from-green-500 to-emerald-500',
     },
     {
       icon: Code,
       title: 'API Reference',
       description: 'Explore the complete API documentation',
-      href: '/docs/api/overview',
+      href: '/docs/sdk/overview',
       color: 'from-orange-500 to-red-500',
     },
   ];
@@ -113,9 +113,9 @@ export default function DocsHomePage() {
         <div className="grid gap-3 sm:grid-cols-2">
           {[
             { title: 'Installation', href: '/docs/getting-started/installation' },
-            { title: 'Configuration', href: '/docs/guides/configuration' },
-            { title: 'Best Practices', href: '/docs/guides/best-practices' },
-            { title: 'Troubleshooting', href: '/docs/guides/troubleshooting' },
+            { title: 'Configuration', href: '/docs/deployment/environment' },
+            { title: 'Best Practices', href: '/docs/guardrails/writing-custom' },
+            { title: 'Troubleshooting', href: '/docs/api/errors' },
           ].map((topic) => (
             <Link
               key={topic.href}
