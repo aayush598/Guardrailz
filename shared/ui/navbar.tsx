@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useUser, UserButton } from '@clerk/nextjs';
 import { Shield, Menu, X, ArrowRight } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 
 export function Navbar() {
   const router = useRouter();
+  const pathname = usePathname();
   const { isSignedIn } = useUser();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -65,18 +66,29 @@ export function Navbar() {
 
           {/* 2. Desktop Navigation (Center - Perfectly Aligned) */}
           <div className="absolute left-1/2 hidden -translate-x-1/2 items-center space-x-2 md:flex">
-            {navItems.map((item) => (
-              <button
-                key={item.label}
-                onClick={() => scrollToSection(item.href)}
-                className="group relative px-4 py-2 text-sm font-semibold text-gray-600 transition-colors hover:text-gray-900"
-              >
-                <span>{item.label}</span>
+            {navItems.map((item) => {
+              const isActive =
+                item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
 
-                {/* The Animated Line Effect */}
-                <span className="absolute inset-x-4 bottom-1 h-0.5 origin-left scale-x-0 bg-gray-900 transition-transform duration-300 ease-out group-hover:scale-x-100" />
-              </button>
-            ))}
+              return (
+                <button
+                  key={item.label}
+                  onClick={() => scrollToSection(item.href)}
+                  className={`group relative px-4 py-2 text-sm font-semibold transition-colors ${
+                    isActive ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  <span>{item.label}</span>
+
+                  {/* The Animated Line Effect */}
+                  <span
+                    className={`absolute inset-x-4 bottom-1 h-0.5 origin-left bg-gray-900 transition-transform duration-300 ease-out ${
+                      isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                    }`}
+                  />
+                </button>
+              );
+            })}
           </div>
 
           {/* 3. Action Buttons & Clerk (Right) */}
@@ -130,15 +142,24 @@ export function Navbar() {
         {mobileMenuOpen && (
           <div className="border-t border-gray-100 bg-white py-4 md:hidden">
             <div className="space-y-1 px-2 pb-3 pt-2">
-              {navItems.map((item) => (
-                <button
-                  key={item.label}
-                  onClick={() => scrollToSection(item.href)}
-                  className="block w-full rounded-lg px-3 py-2 text-left text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                >
-                  {item.label}
-                </button>
-              ))}
+              {navItems.map((item) => {
+                const isActive =
+                  item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+
+                return (
+                  <button
+                    key={item.label}
+                    onClick={() => scrollToSection(item.href)}
+                    className={`block w-full rounded-lg px-3 py-2 text-left text-base font-medium transition-colors ${
+                      isActive
+                        ? 'bg-gray-100 text-gray-900'
+                        : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                );
+              })}
               {!isSignedIn && (
                 <div className="mt-4 grid grid-cols-2 gap-2 px-3">
                   <Button variant="outline" onClick={() => router.push('/sign-in')}>

@@ -1,35 +1,43 @@
 import Link from 'next/link';
-import { ArrowRight, Book, Zap, Shield, Code } from 'lucide-react';
+import { ArrowRight, Rocket, Layers, ShieldCheck, Terminal } from 'lucide-react';
 
 export default function DocsHomePage() {
   const quickLinks = [
     {
-      icon: Zap,
+      icon: Rocket,
       title: 'Quickstart',
       description: 'Get up and running with Guardrails in minutes',
       href: '/docs/getting-started/quickstart',
-      color: 'from-blue-500 to-cyan-500',
+      iconColor: 'text-blue-600',
+      iconBg: 'bg-blue-50',
+      hoverBorder: 'group-hover:border-blue-200',
     },
     {
-      icon: Book,
+      icon: Layers,
       title: 'Architecture',
       description: 'Understand how Guardrails works under the hood',
       href: '/docs/introduction/architecture',
-      color: 'from-purple-500 to-pink-500',
+      iconColor: 'text-indigo-600',
+      iconBg: 'bg-indigo-50',
+      hoverBorder: 'group-hover:border-indigo-200',
     },
     {
-      icon: Shield,
+      icon: ShieldCheck,
       title: 'Security',
       description: 'Learn about security features and best practices',
       href: '/docs/deployment/security',
-      color: 'from-green-500 to-emerald-500',
+      iconColor: 'text-teal-600',
+      iconBg: 'bg-teal-50',
+      hoverBorder: 'group-hover:border-teal-200',
     },
     {
-      icon: Code,
+      icon: Terminal,
       title: 'API Reference',
       description: 'Explore the complete API documentation',
       href: '/docs/sdk/overview',
-      color: 'from-orange-500 to-red-500',
+      iconColor: 'text-violet-600',
+      iconBg: 'bg-violet-50',
+      hoverBorder: 'group-hover:border-violet-200',
     },
   ];
 
@@ -54,28 +62,23 @@ export default function DocsHomePage() {
             <Link
               key={link.href}
               href={link.href}
-              className="group relative overflow-hidden rounded-xl border border-gray-200 bg-white p-6 transition-all hover:border-gray-300 hover:shadow-lg"
+              className={`group relative overflow-hidden rounded-xl border border-gray-200 bg-white p-6 transition-all hover:shadow-md ${link.hoverBorder}`}
             >
-              {/* Gradient background on hover */}
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${link.color} opacity-0 transition-opacity group-hover:opacity-5`}
-              />
-
-              <div className="relative space-y-3">
+              <div className="relative flex items-start gap-4">
                 {/* Icon */}
                 <div
-                  className={`inline-flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br ${link.color}`}
+                  className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-lg ${link.iconBg}`}
                 >
-                  <Icon className="h-6 w-6 text-white" />
+                  <Icon className={`h-6 w-6 ${link.iconColor}`} />
                 </div>
 
                 {/* Content */}
-                <div>
+                <div className="space-y-1">
                   <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900">
                     {link.title}
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    <ArrowRight className="h-4 w-4 text-gray-400 decoration-2 transition-transform group-hover:translate-x-1 group-hover:text-gray-900" />
                   </h3>
-                  <p className="mt-1 text-sm text-gray-600">{link.description}</p>
+                  <p className="text-sm text-gray-600">{link.description}</p>
                 </div>
               </div>
             </Link>
@@ -93,7 +96,7 @@ export default function DocsHomePage() {
         <div className="flex gap-3 pt-2">
           <Link
             href="/docs/getting-started/quickstart"
-            className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-gray-600 to-gray-700 px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-gray-500/30 transition-all hover:from-gray-700 hover:to-gray-800 hover:shadow-xl hover:shadow-gray-500/40"
+            className="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-gray-900/10 transition-all hover:bg-gray-800 hover:shadow-gray-900/20"
           >
             Start Building
             <ArrowRight className="h-4 w-4" />
